@@ -25,9 +25,9 @@ export default function Footer() {
       {/* Top Newsletter / Invitation Section (Floating Half Outside and Half Inside Footer) */}
       <div className="max-container relative z-20 mt-16 sm:-mt-26 mb-16">
         <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-[rgba(178,240,209,0.22)] min-h-[200px] flex items-center p-8 sm:p-12">
-          {/* Background Image: using existing wanderly_newsletter_banner.jpg */}
+          {/* Background Image: using existing wanderly_newsletter_banner.webp */}
           <img
-            src="/images/wanderly_newsletter_banner.jpg"
+            src="/images/wanderly_newsletter_banner.webp"
             alt="Travel Inspiration - Tropical Infinity Pool & Coastal Rocks"
             className="absolute inset-0 w-full h-full object-cover object-[center_50%] pointer-events-none"
           />

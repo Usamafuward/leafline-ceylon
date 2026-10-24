@@ -46,13 +46,13 @@ export const TOURS_DATA: TourPackage[] = [
     region: "all",
     style: "heritage",
     idealSeason: "October to May",
-    heroImage: "/images/sigiriya_rock_aerial_drone_sunset.jpg",
+    heroImage: "/images/sigiriya_rock_aerial_drone_sunset.webp",
     galleryImages: [
-      "/images/sigiriya_rock_aerial_drone_sunset.jpg",
-      "/images/blue_train_tea_plantations.jpg",
-      "/images/yala_safari_jeep_elephant_encounter.jpg",
-      "/images/ella_nine_arch_bridge_train_crossing.jpg",
-      "/images/mirissa_coconut_tree_hill_sunset.jpg"
+      "/images/sigiriya_rock_aerial_drone_sunset.webp",
+      "/images/blue_train_tea_plantations.webp",
+      "/images/yala_safari_jeep_elephant_encounter.webp",
+      "/images/ella_nine_arch_bridge_train_crossing.webp",
+      "/images/mirissa_coconut_tree_hill_sunset.webp"
     ],
     overview: "Our flagship private tour covers the very best of Sri Lanka with comfort and ease. Climb the iconic Sigiriya Rock Fortress at sunrise, relax in beautiful tea country bungalows, enjoy private wildlife safaris in Yala, and explore the historic cobblestone streets of Galle Fort with your personal chauffeur-guide.",
     highlights: [
@@ -205,13 +205,13 @@ export const TOURS_DATA: TourPackage[] = [
     region: "central",
     style: "tea",
     idealSeason: "Year-Round (Best Dec–Apr)",
-    heroImage: "/images/ella_scenic_mountain_train.jpg",
+    heroImage: "/images/ella_scenic_mountain_train.webp",
     galleryImages: [
-      "/images/ella_scenic_mountain_train.jpg",
-      "/images/nuwara_eliya_tea_estate_morning_clouds.jpg",
-      "/images/nuwara_eliya_red_train_tea_hills.jpg",
-      "/images/ella_nine_arches_bridge_drone.jpg",
-      "/images/horton_plains_worlds_end_mist.jpg"
+      "/images/ella_scenic_mountain_train.webp",
+      "/images/nuwara_eliya_tea_estate_morning_clouds.webp",
+      "/images/nuwara_eliya_red_train_tea_hills.webp",
+      "/images/ella_nine_arches_bridge_drone.webp",
+      "/images/horton_plains_worlds_end_mist.webp"
     ],
     overview: "This relaxing mountain tour takes you into the heart of Sri Lanka's central highlands. Travel from the sacred city of Kandy to the tea plantations of Nuwara Eliya and the breathtaking ravines of Ella. Ride the scenic blue train, walk among tea pickers, and sleep in cozy colonial heritage hotels.",
     highlights: [
@@ -323,13 +323,13 @@ export const TOURS_DATA: TourPackage[] = [
     region: "yala",
     style: "wildlife",
     idealSeason: "Year-Round (Best Feb–Oct)",
-    heroImage: "/images/yala_leopard_sunset.jpg",
+    heroImage: "/images/yala_leopard_sunset.webp",
     galleryImages: [
-      "/images/yala_leopard_sunset.jpg",
-      "/images/yala_safari_jeep_elephant_encounter.jpg",
-      "/images/udawalawe_elephant_mother_calf.jpg",
-      "/images/safari_elephants_sunset.jpg",
-      "/images/yala_leopard_safari_track.jpg"
+      "/images/yala_leopard_sunset.webp",
+      "/images/yala_safari_jeep_elephant_encounter.webp",
+      "/images/udawalawe_elephant_mother_calf.webp",
+      "/images/safari_elephants_sunset.webp",
+      "/images/yala_leopard_safari_track.webp"
     ],
     overview: "Sri Lanka has the world's highest density of leopards and hundreds of wild Asian elephants. Designed for wildlife lovers and photographers, this safari expedition includes multiple private 4x4 game drives with experienced local trackers.",
     highlights: [
@@ -432,13 +432,13 @@ export const TOURS_DATA: TourPackage[] = [
     region: "south",
     style: "honeymoon",
     idealSeason: "October to May",
-    heroImage: "/images/sigiriya_rock_ancient_steps_sunset.jpg",
+    heroImage: "/images/sigiriya_rock_ancient_steps_sunset.webp",
     galleryImages: [
-      "/images/sigiriya_rock_ancient_steps_sunset.jpg",
-      "/images/mirissa_coconut_tree_hill_sunset.jpg",
-      "/images/galle_fort_lighthouse_twilight.jpg",
-      "/images/south_coast_palm_sunset.jpg",
-      "/images/sri_lanka_traditional_stilt_fishermen_gold.jpg"
+      "/images/sigiriya_rock_ancient_steps_sunset.webp",
+      "/images/mirissa_coconut_tree_hill_sunset.webp",
+      "/images/galle_fort_lighthouse_twilight.webp",
+      "/images/south_coast_palm_sunset.webp",
+      "/images/sri_lanka_traditional_stilt_fishermen_gold.webp"
     ],
     overview: "Designed for couples, this romantic tour balances boutique luxury villas with unforgettable shared adventures. Float in a hot air balloon over Sigiriya at sunrise, sip champagne beside tea estate waterfalls, and relax in private beachfront pool villas in southern Sri Lanka.",
     highlights: [
@@ -567,13 +567,13 @@ export const TOURS_DATA: TourPackage[] = [
     region: "cultural",
     style: "heritage",
     idealSeason: "Year-Round",
-    heroImage: "/images/kandy_dalada_maligawa_sunset.jpg",
+    heroImage: "/images/kandy_dalada_maligawa_sunset.webp",
     galleryImages: [
-      "/images/kandy_dalada_maligawa_sunset.jpg",
-      "/images/sigiriya_classic_rock_landscape.jpg",
-      "/images/kandy_temple_of_tooth_octagon_night.jpg",
-      "/images/kandy_buddha_cultural_statue.jpg",
-      "/images/sigiriya_sunrise.jpg"
+      "/images/kandy_dalada_maligawa_sunset.webp",
+      "/images/sigiriya_classic_rock_landscape.webp",
+      "/images/kandy_temple_of_tooth_octagon_night.webp",
+      "/images/kandy_buddha_cultural_statue.webp",
+      "/images/sigiriya_sunrise.webp"
     ],
     overview: "Discover the ancient wonders of Sri Lanka. Visit monumental Buddhist stupas, walk through the 5th-century royal fortress of Sigiriya, cycle through the medieval city of Polonnaruwa, and marvel at the rock temples of Dambulla.",
     highlights: [
@@ -662,13 +662,13 @@ export const TOURS_DATA: TourPackage[] = [
     region: "south",
     style: "ocean",
     idealSeason: "November to April",
-    heroImage: "/images/galle_fort_lighthouse_twilight.jpg",
+    heroImage: "/images/galle_fort_lighthouse_twilight.webp",
     galleryImages: [
-      "/images/galle_fort_lighthouse_twilight.jpg",
-      "/images/sri_lanka_traditional_stilt_fishermen_gold.jpg",
-      "/images/mirissa_coconut_tree_hill_sunset.jpg",
-      "/images/mirissa_boat_turquoise_ocean.jpg",
-      "/images/galle_fort_ramparts_sunset.jpg"
+      "/images/galle_fort_lighthouse_twilight.webp",
+      "/images/sri_lanka_traditional_stilt_fishermen_gold.webp",
+      "/images/mirissa_coconut_tree_hill_sunset.webp",
+      "/images/mirissa_boat_turquoise_ocean.webp",
+      "/images/galle_fort_ramparts_sunset.webp"
     ],
     overview: "Enjoy the sunny tropical shores of southern Sri Lanka. Take a boat tour from Mirissa to see the largest creatures on earth—Blue Whales. Walk the cobblestone streets and ocean ramparts of 17th-century Galle Dutch Fort, and relax on golden swimming beaches.",
     highlights: [

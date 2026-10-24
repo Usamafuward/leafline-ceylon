@@ -166,7 +166,7 @@ function PackagesContent() {
         eyebrow="Curated Private Circuits"
         title="Private Sri Lanka Tour Packages"
         description="Thoughtfully planned private itineraries featuring ancient UNESCO fortresses, emerald tea estates, wild elephant safaris, and golden sandy beaches. Every journey is fully customizable."
-        image="/images/nuwara_eliya_tea_estate_morning_clouds.jpg"
+        image="/images/nuwara_eliya_tea_estate_morning_clouds.webp"
         imageAlt="Tea estates of Nuwara Eliya in morning cloud"
         imagePosition="center 35%"
       />

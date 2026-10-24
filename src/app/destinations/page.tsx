@@ -53,7 +53,7 @@ export default function DestinationsPage() {
         eyebrow="Island Sanctuaries & Regions"
         title="The Diverse Realms of Sri Lanka"
         description="Within just four hours of scenic travel, transition from golden Indian Ocean shores to 2,000-meter alpine cloud forests and ancient UNESCO kingdom citadels."
-        image="/images/sigiriya_rock_ancient_steps_sunset.jpg"
+        image="/images/sigiriya_rock_ancient_steps_sunset.webp"
         imageAlt="Ancient steps of Sigiriya Rock at sunset"
         imagePosition="center 40%"
       />

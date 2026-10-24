@@ -17,7 +17,7 @@ export default function ServicesPage() {
         eyebrow="Premium Travel Services & Private Vehicles"
         title="Private Chauffeurs & Travel Services"
         description="Every journey with Leafline Ceylon is organized with care and reliability. From personal meet and greet at Colombo Airport to scenic train tickets and private 4x4 safari jeeps."
-        image="/images/toyota_prado_luxury_suv.jpg"
+        image="/images/toyota_prado_luxury_suv.webp"
         imageAlt="Private chauffeur-driven SUV"
         imagePosition="center 55%"
       />

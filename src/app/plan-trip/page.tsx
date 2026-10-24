@@ -85,7 +85,7 @@ export default function PlanTripPage() {
         eyebrow="Custom Trip Planner • Sri Lanka"
         title="Plan Your Custom Sri Lanka Holiday"
         description="Tell us how you like to travel, choose your favorite destinations and experiences, and get a personalized day-by-day itinerary with transparent pricing within 24 hours."
-        image="/images/ella_nine_arches_bridge_drone.jpg"
+        image="/images/ella_nine_arches_bridge_drone.webp"
         imageAlt="Aerial view of the Nine Arch Bridge in Ella"
         imagePosition="center 50%"
       />

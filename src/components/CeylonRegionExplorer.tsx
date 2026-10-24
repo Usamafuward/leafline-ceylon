@@ -32,7 +32,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
     tagline: 'UNESCO Sky Citadels & Cave Temples',
     description:
       'The sacred cultural heartland of Sri Lanka. Ascend the 5th-century Sigiriya Rock Fortress at sunrise, wander the cave temples of Dambulla, and explore ancient royal palaces.',
-    image: '/images/sigiriya_rock_ancient_steps_sunset.jpg',
+    image: '/images/sigiriya_rock_ancient_steps_sunset.webp',
     bestSeason: 'Dec – Apr & Jul – Sep',
     keyDestinations: 'Sigiriya, Anuradhapura, Polonnaruwa, Dambulla',
     highlights: [
@@ -50,7 +50,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
     tagline: 'Misty Mountains & Colonial Tea Estates',
     description:
       'Rolling emerald tea plantations, cool highland air, and the scenic mountain blue train winding across the Demodara Nine Arch Bridge.',
-    image: '/images/ella_nine_arch_bridge_train_crossing.jpg',
+    image: '/images/ella_nine_arch_bridge_train_crossing.webp',
     bestSeason: 'Dec – May & Aug – Sep',
     keyDestinations: 'Kandy, Nuwara Eliya, Ella, Hatton',
     highlights: [
@@ -68,7 +68,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
     tagline: 'Colonial Ramparts, Surf & Leopard Safaris',
     description:
       'Golden coastline meets wild game reserves. Stroll the ramparts of UNESCO Galle Fort, search for wild leopards in Yala, and watch blue whales off Mirissa.',
-    image: '/images/galle_fort_lighthouse_twilight.jpg',
+    image: '/images/galle_fort_lighthouse_twilight.webp',
     bestSeason: 'Nov – Apr',
     keyDestinations: 'Galle Fort, Mirissa, Weligama, Yala',
     highlights: [
@@ -86,7 +86,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
     tagline: 'Turquoise Waters, Point Breaks & Coral Reefs',
     description:
       'Pristine uncrowded beaches, calm shallow waters in Passikudah, rich marine biodiversity at Pigeon Island, and world-class surfing in Arugam Bay.',
-    image: '/images/nilaveli_beach_turquoise_cove.jpg',
+    image: '/images/nilaveli_beach_turquoise_cove.webp',
     bestSeason: 'May – Oct (Sri Lanka’s Summer Sun)',
     keyDestinations: 'Trincomalee, Passikudah, Arugam Bay',
     highlights: [
@@ -104,7 +104,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
     tagline: 'Coastal Lagoons, Estuaries & Dolphin Pods',
     description:
       'Seaside beach resorts, peaceful Dutch canals in Negombo, coconut plantation trails, and spinner dolphin boat safaris off Kalpitiya.',
-    image: '/images/bento_bentota_lagoon.jpg',
+    image: '/images/bento_bentota_lagoon.webp',
     bestSeason: 'Nov – Apr',
     keyDestinations: 'Negombo, Kalpitiya, Chilaw',
     highlights: [
@@ -122,7 +122,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
     tagline: 'Colonial Elegance & Coastal Capital Dining',
     description:
       'Sri Lanka’s cosmopolitan gateway. Explore colonial architecture, tranquil lakeside temples, oceanfront sunsets along Galle Face Green, and celebrated seafood dining.',
-    image: '/images/colombo_city_skyline.jpg',
+    image: '/images/colombo_city_skyline.webp',
     bestSeason: 'Year-round (Best: Dec – Apr)',
     keyDestinations: 'Colombo, Kelaniya, Ratnapura',
     highlights: [
@@ -140,7 +140,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
     tagline: 'Sacred Hindu Temples & Island Traditions',
     description:
       'Rich Dravidian Hindu culture, spectacular coastal causeways, historic Dutch ramparts, and distinctive culinary flavors in Sri Lanka’s northern realm.',
-    image: '/images/jaffna_nallur_kovil.jpg',
+    image: '/images/jaffna_nallur_kovil.webp',
     bestSeason: 'Jan – Sep',
     keyDestinations: 'Jaffna, Mannar, Delft Island',
     highlights: [

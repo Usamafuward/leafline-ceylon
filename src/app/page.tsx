@@ -26,31 +26,31 @@ import {
 // Curated Ceylon Sanctuary Scenes for Auto-Changing Hero Background
 const HERO_SLIDES = [
   {
-    image: '/images/sigiriya_rock_aerial_drone_sunset.jpg',
+    image: '/images/sigiriya_rock_aerial_drone_sunset.webp',
     tag: 'ANCIENT SKY CITADEL',
     location: 'Sigiriya Rock Fortress',
     region: 'Cultural Triangle',
   },
   {
-    image: '/images/ella_scenic_mountain_train.jpg',
+    image: '/images/ella_scenic_mountain_train.webp',
     tag: 'HIGHLAND TEA SANCTUARY',
     location: 'Ceylon Tea Country & Rail',
     region: 'Central Highlands',
   },
   {
-    image: '/images/yala_safari_jeep_elephant_encounter.jpg',
+    image: '/images/yala_safari_jeep_elephant_encounter.webp',
     tag: 'WILD SAFARI EXPEDITIONS',
     location: 'Yala National Park',
     region: 'Southern Wildlife Reserves',
   },
   {
-    image: '/images/ella_nine_arch_bridge_train_crossing.jpg',
+    image: '/images/ella_nine_arch_bridge_train_crossing.webp',
     tag: 'COLONIAL HERITAGE VIADUCT',
     location: 'Demodara Nine Arch Bridge',
     region: 'Ella Mountain Pass',
   },
   {
-    image: '/images/sri_lanka_traditional_stilt_fishermen_gold.jpg',
+    image: '/images/sri_lanka_traditional_stilt_fishermen_gold.webp',
     tag: 'GOLDEN OCEAN TRADITIONS',
     location: 'Stilt Fishermen & Southern Coast',
     region: 'Mirissa & Weligama Bay',
@@ -376,7 +376,7 @@ export default function HomePage() {
             {/* Visual Mosaic / Image */}
             <div className="reveal-image stagger-2 relative rounded-3xl overflow-hidden shadow-2xl h-[360px] sm:h-[420px] lg:h-[480px] max-h-[500px] w-full border border-white/10">
               <ParallaxImage
-                src="/images/ella_scenic_blue_train_portrait.jpg"
+                src="/images/ella_scenic_blue_train_portrait.webp"
                 alt="Scenic Ceylon Blue Train through Tea Country Sri Lanka"
                 className="object-[center_55%]"
               />
@@ -446,7 +446,7 @@ export default function HomePage() {
           <div className="reveal-card bg-[#103c2e] rounded-3xl p-8 sm:p-14 lg:p-16 text-center text-white relative overflow-hidden shadow-2xl">
             {/* Parallax photo backdrop under a deep green wash keeps the copy legible */}
             <ParallaxImage
-              src="/images/south_coast_palm_sunset.jpg"
+              src="/images/south_coast_palm_sunset.webp"
               alt=""
               strength={12}
               className="opacity-40 saturate-[0.8]"

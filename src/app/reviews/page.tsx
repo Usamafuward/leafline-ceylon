@@ -65,7 +65,7 @@ export default function ReviewsPage() {
         eyebrow="Traveler Testimonials & Recollections"
         title="The Revered Ceylon Guestbook"
         description="Read authentic recollections from travelers who have explored ancient kingdoms, high tea estates, and wild leopard reserves with Leafline Ceylon."
-        image="/images/mirissa_coconut_tree_hill_sunset.jpg"
+        image="/images/mirissa_coconut_tree_hill_sunset.webp"
         imageAlt="Coconut Tree Hill in Mirissa at sunset"
         imagePosition="center 55%"
       />

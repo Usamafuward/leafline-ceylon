@@ -66,7 +66,7 @@ export default function ContactPage() {
         eyebrow="Get in Touch • 24/7 Support"
         title="Contact Our Sri Lanka Tour Specialists"
         description="Whether you need a full custom tour package, private airport transfer, or hotel recommendations, our friendly local team in Colombo is here to assist you."
-        image="/images/colombo_city_skyline.jpg"
+        image="/images/colombo_city_skyline.webp"
         imageAlt="Colombo city skyline"
         imagePosition="center 50%"
       />

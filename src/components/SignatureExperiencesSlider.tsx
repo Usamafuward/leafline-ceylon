@@ -30,7 +30,7 @@ const EXPERIENCES: SignatureExperience[] = [
     cardRegion: 'Cultural Triangle',
     description:
       'Rise at dawn to scale the 5th-century palace citadel carved into solitary granite monoliths. Explore royal water gardens, ancient mirror-wall frescoes, and dramatic 360° summit panoramas.',
-    image: '/images/sigiriya_classic_rock_landscape.jpg',
+    image: '/images/sigiriya_classic_rock_landscape.webp',
     link: '/destinations',
     note: 'climb at first light',
     facts: { bestSeason: 'Dec – Apr', idealStay: '2 nights', highlight: 'UNESCO citadel' },
@@ -44,7 +44,7 @@ const EXPERIENCES: SignatureExperience[] = [
     cardRegion: 'Ella Highlands',
     description:
       'Witness the legendary British colonial railway viaduct hidden amidst emerald mountain tea terraces. Hear the resonant whistle as the Ceylon blue train glides across stone arches in morning mist.',
-    image: '/images/ella_nine_arch_bridge_train_crossing.jpg',
+    image: '/images/ella_nine_arch_bridge_train_crossing.webp',
     link: '/packages/tea-trails-and-scenic-highlands',
     note: 'wait for the blue train',
     facts: { bestSeason: 'Jan – Apr', idealStay: '2 nights', highlight: 'Hill-country rail' },
@@ -58,7 +58,7 @@ const EXPERIENCES: SignatureExperience[] = [
     cardRegion: 'Yala National Park',
     description:
       'Traverse coastal scrublands with master naturalists in custom 4x4 safari jeeps. Track the world’s highest density of wild leopards, herds of Asian elephants, and elusive sloth bears at golden hour.',
-    image: '/images/yala_safari_jeep_elephant_encounter.jpg',
+    image: '/images/yala_safari_jeep_elephant_encounter.webp',
     link: '/packages/wild-ceylon-safari-and-leopards',
     note: 'golden hour is leopard hour',
     facts: { bestSeason: 'Feb – Jul', idealStay: '2 nights', highlight: 'Wild leopards' },
@@ -72,7 +72,7 @@ const EXPERIENCES: SignatureExperience[] = [
     cardRegion: 'Southern Coast',
     description:
       'Sail into the deep sapphire trenches of the Indian Ocean off Dondra Point. Behold Earth’s largest marine giants breaching alongside playful schools of spinner dolphins and sea turtles.',
-    image: '/images/whale.jpg',
+    image: '/images/whale.webp',
     link: '/destinations',
     note: 'sail out before sunrise',
     facts: { bestSeason: 'Dec – Apr', idealStay: '2 nights', highlight: 'Blue whales' },
@@ -86,7 +86,7 @@ const EXPERIENCES: SignatureExperience[] = [
     cardRegion: 'Central Highlands',
     description:
       'Wander endless rolling hills wrapped in cool alpine clouds. Tour historic 19th-century colonial tea factories, pluck tender two leaves and a bud, and taste refined single-estate golden tips.',
-    image: '/images/nuwara_eliya_tea_estate_morning_clouds.jpg',
+    image: '/images/nuwara_eliya_tea_estate_morning_clouds.webp',
     link: '/destinations',
     note: 'taste the morning pluck',
     facts: { bestSeason: 'Jan – Apr', idealStay: '2 nights', highlight: 'Estate bungalows' },
@@ -100,7 +100,7 @@ const EXPERIENCES: SignatureExperience[] = [
     cardRegion: 'Galle Heritage Coast',
     description:
       'Stroll along 17th-century coral ramparts as twilight washes the Indian Ocean in rose and amber. Explore cobbled alleyways, Dutch colonial architecture, artisan boutique cafes, and sea-view bastions.',
-    image: '/images/galle_fort_lighthouse_twilight.jpg',
+    image: '/images/galle_fort_lighthouse_twilight.webp',
     link: '/destinations',
     note: 'walk the ramparts at dusk',
     facts: { bestSeason: 'Dec – Mar', idealStay: '1 night', highlight: 'UNESCO fort' },

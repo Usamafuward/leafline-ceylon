@@ -17,7 +17,7 @@ export default function AboutUsPage() {
         eyebrow="Our Story & Values"
         title="Passionate Local Experts in Sri Lanka"
         description="Founded on the belief that a holiday should be relaxing, comfortable, and tailored to you. We organize 100% private, flexible tours across Sri Lanka with dedicated English-speaking chauffeur guides and handpicked quality hotels."
-        image="/images/kandy_dalada_maligawa_sunset.jpg"
+        image="/images/kandy_dalada_maligawa_sunset.webp"
         imageAlt="Temple of the Tooth in Kandy at sunset"
         imagePosition="center 50%"
       />
@@ -52,7 +52,7 @@ export default function AboutUsPage() {
                 <div className="flex items-center gap-3 pt-3 border-t border-[#cbdcd1]/60">
                   <div className="w-10 h-10 rounded-full overflow-hidden bg-secondary border border-secondary">
                     <img
-                      src="/images/team_founder.jpg"
+                      src="/images/team_founder.webp"
                       alt="Asanka Wickramasinghe"
                       className="w-full h-full object-cover"
                     />
@@ -72,7 +72,7 @@ export default function AboutUsPage() {
             {/* Right Visual Column */}
             <div className="relative rounded-3xl overflow-hidden h-[420px] sm:h-[480px] shadow-xl border border-[#cbdcd1]/60 bg-[#103c2e]">
               <img
-                src="/images/nuwara_eliya_red_train_tea_hills.jpg"
+                src="/images/nuwara_eliya_red_train_tea_hills.webp"
                 alt="Ceylon Tea Country Highlands"
                 className="w-full h-full object-cover"
               />
@@ -220,21 +220,21 @@ export default function AboutUsPage() {
               {
                 name: 'Asanka Wickramasinghe',
                 role: 'Founder & Managing Director',
-                image: '/images/team_founder.jpg',
+                image: '/images/team_founder.webp',
                 specialty: 'Highland Tours & Cultural Heritage',
                 bio: 'Born in the central highlands with over 15 years in Sri Lanka inbound tourism. Passionate about showing travelers the authentic heart of the island.',
               },
               {
                 name: 'Dr. Nalin Samaraweera',
                 role: 'Senior Naturalist & Wildlife Advisor',
-                image: '/images/team_naturalist.jpg',
+                image: '/images/team_naturalist.webp',
                 specialty: 'Yala Leopards & Birdwatching',
                 bio: 'Experienced field naturalist with 18+ years guiding wildlife enthusiasts through Yala, Wilpattu, Sinharaja rainforest, and Mirissa whale waters.',
               },
               {
                 name: 'Kumari Senanayake',
                 role: 'Head of Operations & Guest Care',
-                image: '/images/team_concierge.jpg',
+                image: '/images/team_concierge.webp',
                 specialty: 'Hotel Bookings & 24/7 Support',
                 bio: 'Over 12 years coordinating seamless private transport, airport arrivals, and personalized hotel arrangements for international travelers.',
               },
