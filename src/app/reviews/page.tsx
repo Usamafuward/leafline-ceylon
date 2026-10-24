@@ -1,10 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import SplitText from '@/components/ui/SplitText';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import { REVIEWS_DATA } from '@/data/reviews';
 import ReviewCard from '@/components/ReviewCard';
+import CountUp from '@/components/ui/CountUp';
 import { PenLine, ChevronDown, ThumbsUp, X } from 'lucide-react';
+import PageHero from '@/components/PageHero';
+import useScrollLock from '@/components/ui/useScrollLock';
+import { gridItemMotion } from '@/components/ui/gridMotion';
 
 const FILTER_OPTIONS = [
   { id: 'all', label: 'All Reviews (380+)' },
@@ -17,6 +23,17 @@ export default function ReviewsPage() {
   const [filter, setFilter] = useState('all');
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
+
+  // Lock the page behind the open form, and let Escape close it
+  useScrollLock(showSubmitModal);
+  useEffect(() => {
+    if (!showSubmitModal) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowSubmitModal(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [showSubmitModal]);
   const [form, setForm] = useState({
     name: '',
     country: '',
@@ -42,34 +59,16 @@ export default function ReviewsPage() {
 
   return (
     <div className="flex flex-col w-full bg-surface text-on-surface">
-      {/* 1. HERO BANNER */}
-      <section className="w-full bg-[#103c2e] text-white pt-28 sm:pt-32 pb-16 sm:pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(178,240,209,0.12)_0%,transparent_60%)] pointer-events-none" />
-
-        <div className="max-container relative z-10">
-          {/* Breadcrumb Navigation */}
-          <nav className="flex items-center gap-2 text-xs uppercase tracking-widest text-secondary-fixed mb-5">
-            <Link href="/" className="text-white/80 hover:text-white no-underline transition-colors">
-              Home
-            </Link>
-            <span className="opacity-40">/</span>
-            <span className="text-white font-semibold">Reviews</span>
-          </nav>
-
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase text-secondary-fixed font-semibold mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-secondary-fixed" />
-            TRAVELER TESTIMONIALS &amp; RECOLLECTIONS
-          </span>
-
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal leading-[1.15] max-w-3xl mb-4">
-            The Revered Ceylon Guestbook
-          </h1>
-
-          <p className="text-white/85 text-sm sm:text-base max-w-2xl leading-relaxed">
-            Read authentic recollections from travelers who have explored ancient kingdoms, high tea estates, and wild leopard reserves with Lanka Memo Holidays.
-          </p>
-        </div>
-      </section>
+      {/* 1. PHOTO HERO (shared across inner pages) */}
+      <PageHero
+        crumb="Reviews"
+        eyebrow="Traveler Testimonials & Recollections"
+        title="The Revered Ceylon Guestbook"
+        description="Read authentic recollections from travelers who have explored ancient kingdoms, high tea estates, and wild leopard reserves with Leafline Ceylon."
+        image="/images/mirissa_coconut_tree_hill_sunset.jpg"
+        imageAlt="Coconut Tree Hill in Mirissa at sunset"
+        imagePosition="center 55%"
+      />
 
       {/* 2. AGGREGATE SCORE BAR & THEME FILTER */}
       <section className="w-full bg-[#edf4ef]/95 backdrop-blur-md py-4 sm:py-5 z-30 border-b border-[#cbdcd1]/80 shadow-xs">
@@ -77,11 +76,13 @@ export default function ReviewsPage() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             {/* Left: Star rating summary */}
             <div className="flex items-center gap-4">
-              <div className="text-3xl sm:text-4xl font-serif font-bold text-primary leading-none">
-                4.98
-              </div>
+              <CountUp
+                value={4.98}
+                decimals={2}
+                className="text-3xl sm:text-4xl font-serif font-bold text-primary leading-none"
+              />
               <div>
-                <div className="flex text-amber-500 text-base sm:text-lg gap-0.5">
+                <div className="flex text-secondary text-base sm:text-lg gap-0.5">
                   {'★★★★★'.split('').map((s, i) => (
                     <span key={i}>{s}</span>
                   ))}
@@ -155,16 +156,18 @@ export default function ReviewsPage() {
         <div className="max-container">
           <div className="flex items-center justify-between mb-8">
             <span className="text-xs uppercase tracking-widest text-secondary font-semibold">
-              Showing {filteredReviews.length} traveler stories
+              Showing <CountUp key={filter} value={filteredReviews.length} duration={0.8} /> traveler stories
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredReviews.map((rev, idx) => (
-              <div key={rev.id} className={`reveal-card stagger-${(idx % 3) + 1} h-full`}>
-                <ReviewCard review={rev} />
-              </div>
-            ))}
+            <AnimatePresence mode="popLayout">
+              {filteredReviews.map((rev, idx) => (
+                <motion.div key={rev.id} className="h-full" {...gridItemMotion(idx)}>
+                  <ReviewCard review={rev} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </div>
       </section>
@@ -179,7 +182,7 @@ export default function ReviewsPage() {
                 CUSTOM TOUR PLANNING
               </span>
               <h2 className="reveal-text stagger-1 font-serif text-3xl sm:text-4xl lg:text-5xl leading-tight mb-5">
-                Prefer a Custom Private Itinerary?
+                <SplitText text="Prefer a Custom Private Itinerary?" />
               </h2>
               <p className="reveal-text stagger-2 text-base text-[#dde4df] leading-relaxed mb-10 max-w-2xl mx-auto">
                 Tell us where you want to go, what you want to see, and your travel dates. We will design a personalized itinerary with clear, honest pricing within 24 hours.
@@ -203,24 +206,45 @@ export default function ReviewsPage() {
         </div>
       </section>
 
-      {/* 5. REVIEW SUBMISSION MODAL */}
+      {/* 5. REVIEW SUBMISSION MODAL (backdrop fades, panel rises in; page behind is locked) */}
+      <AnimatePresence>
       {showSubmitModal && (
         <div
-          onClick={() => setShowSubmitModal(false)}
-          className="fixed inset-0 z-50 bg-[#103c2e]/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          key="review-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Write a guestbook entry"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
         >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="max-w-[580px] w-full bg-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-[#cbdcd1]/80 max-h-[92vh] overflow-y-auto"
+          <motion.div
+            className="absolute inset-0 bg-[#103c2e]/95 backdrop-blur-md"
+            onClick={() => setShowSubmitModal(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.25, delay: 0.05 } }}
+            transition={{ duration: 0.3 }}
+          />
+          <motion.div
+            data-lenis-prevent
+            className="relative max-w-[580px] w-full bg-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-[#cbdcd1]/80 max-h-[92vh] overflow-y-auto"
+            initial={{ opacity: 0, y: 40, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 24, scale: 0.98, transition: { duration: 0.2, ease: 'easeIn' } }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           >
             {reviewSubmitted ? (
-              <div className="text-center py-6">
+              <motion.div
+                className="text-center py-6"
+                initial={{ opacity: 0, scale: 0.92 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              >
                 <ThumbsUp className="w-12 h-12 text-secondary mb-3 mx-auto" />
                 <h3 className="font-serif text-2xl text-primary mb-2">
                   Reflection Received
                 </h3>
                 <p className="text-on-surface-variant text-sm leading-relaxed mb-6">
-                  Thank you for sharing your experience with Lanka Memo Holidays. Your kind words mean the world to our chauffeurs and naturalists.
+                  Thank you for sharing your experience with Leafline Ceylon. Your kind words mean the world to our chauffeurs and naturalists.
                 </p>
                 <button
                   onClick={() => setShowSubmitModal(false)}
@@ -228,7 +252,7 @@ export default function ReviewsPage() {
                 >
                   Close Window
                 </button>
-              </div>
+              </motion.div>
             ) : (
               <form onSubmit={handleReviewSubmit} className="flex flex-col gap-4">
                 <div className="flex justify-between items-center pb-2 border-b border-[#cbdcd1]/60">
@@ -308,9 +332,10 @@ export default function ReviewsPage() {
                 </button>
               </form>
             )}
-          </div>
+          </motion.div>
         </div>
       )}
+      </AnimatePresence>
     </div>
   );
 }

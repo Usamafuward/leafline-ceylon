@@ -1,7 +1,9 @@
 'use client';
 
+import SplitText from '@/components/ui/SplitText';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { TOURS_DATA } from '@/data/tours';
 import { DESTINATIONS_DATA } from '@/data/destinations';
 import { REVIEWS_DATA } from '@/data/reviews';
@@ -9,12 +11,13 @@ import PackageCard from '@/components/PackageCard';
 import ReviewCard from '@/components/ReviewCard';
 import CeylonRegionExplorer from '@/components/CeylonRegionExplorer';
 import SignatureExperiencesSlider from '@/components/SignatureExperiencesSlider';
+import ParallaxImage from '@/components/ui/ParallaxImage';
+import CountUp from '@/components/ui/CountUp';
 import {
   ArrowRight,
-  Compass,
-  Route,
-  Armchair,
-  Headset,
+  ShieldCheck,
+  Car,
+  UserRound,
   CheckCircle2,
   Sparkles,
 } from 'lucide-react';
@@ -54,85 +57,105 @@ const HERO_SLIDES = [
   },
 ];
 
+// Trust strip figures (kept consistent with the reviews heading further down this page)
+const TRUST_STATS = [
+  { value: 10, suffix: '+', label: 'Years crafting Sri Lanka journeys' },
+  { value: 100, suffix: '%', label: 'Private tours, never shared' },
+  { value: 4.9, decimals: 1, star: true, label: 'Rating from 350+ completed tours' },
+  { value: 24, suffix: '/7', label: 'Colombo concierge support' },
+];
+
+const TRUST_CREDENTIALS = [
+  { icon: ShieldCheck, text: 'SLTDA licensed operator' },
+  { icon: Car, text: 'Climate-controlled private fleet' },
+  { icon: UserRound, text: 'English-speaking chauffeur guides' },
+];
+
+// How long each hero photo shows before cross-fading to the next
+const HERO_SLIDE_MS = 6000;
+
+const HERO_HEADLINE = 'Journeys Beyond the Ordinary';
+
 export default function HomePage() {
   const featuredTours = TOURS_DATA.slice(0, 3);
   const featuredDestinations = DESTINATIONS_DATA.slice(0, 4);
 
-  // Auto-changing hero slide state (cycles every 5 seconds with smooth transition)
+  // Auto-changing hero slides. A plain timer drives it (re-armed on every slide change), so it
+  // never stalls: no hover pause (the hero fills the screen, so the cursor is nearly always over it)
+  // and no dependence on any visible progress UI. Reduced-motion visitors stay on the first slide.
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-
-  // Track scroll position to hide Trust Capsule at top of hero, and smoothly slide it up when scrolling starts
-  const [hasScrolledPastTop, setHasScrolledPastTop] = useState(false);
+  const activeSlide = HERO_SLIDES[currentSlide];
 
   useEffect(() => {
-    if (isPaused) return;
-    const interval = setInterval(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const timer = window.setTimeout(() => {
       setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [isPaused]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      // Hide capsule when at the top of hero (<= 40px) for an unobstructed view; slide up once scrolling starts (> 40px)
-      setHasScrolledPastTop(window.scrollY > 40);
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-
+    }, HERO_SLIDE_MS);
+    return () => window.clearTimeout(timer);
+  }, [currentSlide]);
 
   return (
     <div className="flex flex-col w-full">
       {/* SECTION 1: CINEMATIC HERO WITH AUTO-CHANGING BACKGROUND (FULL SCREEN HEIGHT) */}
       <section
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
         className="relative w-full min-h-screen h-screen flex items-center justify-center overflow-hidden bg-[#00251a]"
       >
-        {/* Layered Background Slides with Smooth Cross-Fade & Ken Burns Zoom */}
-        {HERO_SLIDES.map((slide, idx) => {
-          const isActive = idx === currentSlide;
-          return (
-            <img
-              key={slide.image}
-              src={slide.image}
-              alt={slide.location}
-              className={`absolute inset-0 w-full h-full object-cover object-[center_40%] pointer-events-none transition-all duration-1000 ease-out ${isActive ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
-                }`}
-            />
-          );
-        })}
+        {/* Layered Background Slides with Smooth Cross-Fade & Slow Ken Burns Zoom */}
+        {/* Optimised & loaded up front: a raw original (one is 7.3 MB) could still be downloading when
+            its turn came, making the slideshow look stuck on the previous photo */}
+        {HERO_SLIDES.map((slide, idx) => (
+          <Image
+            key={slide.image}
+            src={slide.image}
+            alt={slide.location}
+            fill
+            sizes="100vw"
+            preload={idx === 0}
+            loading="eager"
+            className={`hero-slide object-cover object-[center_40%] pointer-events-none ${idx === currentSlide ? 'is-active' : ''}`}
+          />
+        ))}
 
         {/* Crystal-Clear Subtle Contrast Scrim (No Muddy Overlays) */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/15 to-[#00140e]/60 pointer-events-none" />
+        {/* z-[1] keeps the scrim above the active slide, which is raised to z-index 1 */}
+        <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/45 via-black/15 to-[#00140e]/60 pointer-events-none" />
 
         {/* Hero Content */}
         <div className="max-container relative z-10 w-full pt-34 pb-18 flex flex-col items-center text-center">
           {/* Dynamic Editorial Badge with Live Sanctuary Tag */}
-          <div className="reveal-text inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/12 backdrop-blur-md border border-white/28 mb-8 shadow-xl">
+          <div
+            className="hero-enter inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/12 backdrop-blur-md border border-white/28 mb-8 shadow-xl"
+            style={{ '--hero-delay': '0.1s' } as React.CSSProperties}
+          >
             <span className="pulse-dot" />
-            <span className="text-xs text-secondary-fixed tracking-[0.24em] uppercase font-semibold transition-all duration-300">
-              DISCOVER SRI LANKA • {HERO_SLIDES[currentSlide].tag}
+            <span className="text-xs text-secondary-fixed tracking-[0.24em] uppercase font-semibold">
+              DISCOVER SRI LANKA •{' '}
+              <span key={currentSlide} className="hero-swap inline-block">
+                {activeSlide.tag}
+              </span>
             </span>
           </div>
 
-          {/* Main Editorial Headline - Single Line on Desktop */}
-          <h1 className="reveal-text stagger-1 font-serif text-[clamp(2.2rem,4.4vw,4.25rem)] text-white font-normal max-w-[1200px] w-full leading-[1.15] tracking-[-0.015em] mb-5 drop-shadow-[0_3px_20px_rgba(0,0,0,0.6)]">
-            Journeys Beyond the Ordinary
+          {/* Main Editorial Headline - revealed letter by letter, like the section headings */}
+          <h1
+            className="font-serif text-[clamp(2.2rem,4.4vw,4.25rem)] text-white font-normal max-w-[1200px] w-full leading-[1.15] tracking-[-0.015em] mb-5 drop-shadow-[0_3px_20px_rgba(0,0,0,0.6)]"
+          >
+            <SplitText text={HERO_HEADLINE} delay={200} />
           </h1>
 
           {/* Supporting Narrative */}
-          <p className="reveal-text stagger-2 font-sans text-[clamp(1rem,1.8vw,1.2rem)] text-[#f0f5f2] max-w-[720px] font-light leading-relaxed mb-10 drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]">
+          <p
+            className="hero-enter font-sans text-[clamp(1rem,1.8vw,1.2rem)] text-[#f0f5f2] max-w-[720px] font-light leading-relaxed mb-10 drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
+            style={{ '--hero-delay': '0.75s' } as React.CSSProperties}
+          >
             Experience the authentic beauty, ancient culture, and untamed wildlife of Sri Lanka through handcrafted private itineraries designed entirely around you.
           </p>
 
           {/* Dual Action Buttons */}
-          <div className="reveal-up stagger-3 flex flex-wrap gap-5 justify-center items-center">
+          <div
+            className="hero-enter flex flex-wrap gap-5 justify-center items-center"
+            style={{ '--hero-delay': '0.9s' } as React.CSSProperties}
+          >
             <Link
               href="/packages"
               className="bg-white hover:bg-secondary-fixed text-[#00251a] px-9 py-4 text-[0.95rem] font-semibold tracking-wide rounded-full whitespace-nowrap inline-flex items-center gap-2 shadow-xl hover:-translate-y-0.5 hover:shadow-2xl transition-all duration-300 no-underline"
@@ -149,7 +172,10 @@ export default function HomePage() {
           </div>
 
           {/* Scroll Cue Indicator */}
-          <div className="reveal-up stagger-4 mt-16 flex flex-col items-center gap-2 opacity-80">
+          <div
+            className="hero-enter mt-16 hidden sm:flex flex-col items-center gap-2 opacity-80"
+            style={{ '--hero-delay': '1.15s' } as React.CSSProperties}
+          >
             <span className="text-[10px] tracking-[0.24em] uppercase text-[#e3eae5]">
               SCROLL TO EXPLORE
             </span>
@@ -158,78 +184,38 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECTION 2: LUXURY TRUST & ASSURANCE CAPSULE */}
-      <section className="w-full pt-0 relative z-20 overflow-visible bg-[#edf4ef]">
-        <div className="max-container">
-          {/* Overlapping Glassmorphic Capsule Bridge */}
-          <div
-            className={`-mt-10 sm:-mt-16 lg:-mt-14 bg-[#103c2e]/92 hover:bg-[#103c2e]/96 text-white border border-white/20 hover:border-[#b2f0d1]/45 backdrop-blur-xl rounded-3xl lg:rounded-full p-5 sm:p-6 lg:py-4.5 lg:px-8  max-w-6xl mx-auto transition-all duration-700 cubic-bezier(0.16,1,0.3,1) ${hasScrolledPastTop
-              ? 'opacity-100 translate-y-0 pointer-events-auto'
-              : 'opacity-0 translate-y-20 pointer-events-none'
-              }`}
-          >
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-0 lg:divide-x lg:divide-white/15 items-center">
-              {/* Pillar 1 */}
-              <div className="group flex items-center gap-3.5 py-1.5 px-3 lg:px-5 lg:first:pl-2 rounded-2xl lg:rounded-full cursor-default">
-                <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/25 flex items-center justify-center text-secondary-fixed shadow-[0_4px_14px_rgba(0,0,0,0.15)] group-hover:scale-105 group-hover:bg-secondary-fixed/25 group-hover:border-secondary-fixed/60 group-hover:shadow-[0_6px_20px_rgba(178,240,209,0.35)] transition-all duration-300 shrink-0">
-                  <Compass className="w-6 h-6 transition-transform duration-300 group-hover:scale-105" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-[0.93rem] text-white font-semibold tracking-tight group-hover:text-secondary-fixed transition-colors duration-200 whitespace-nowrap">
-                    Trusted Local Experts
-                  </h3>
-                  <p className="text-[0.82rem] text-[#c0c8c3] group-hover:text-white transition-colors mt-0.5 leading-snug">
-                    SLTDA Licensed Specialists
-                  </p>
-                </div>
+      {/* SECTION 2: TRUST STATS STRIP
+          Proof first: four big serif figures that count up as the strip comes into view, with a
+          one-line credentials row underneath. Sits on the light band right below the hero. */}
+      <section className="w-full bg-[#edf4ef] border-b border-[#cbdcd1]/60">
+        <div className="max-container py-12 sm:py-14">
+          <dl className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 lg:gap-y-0">
+            {TRUST_STATS.map((stat, i) => (
+              <div
+                key={stat.label}
+                className={`reveal-up stagger-${i + 1} flex flex-col items-center text-center px-4 ${
+                  i % 2 === 1 ? 'border-l border-[#cbdcd1]' : ''
+                } ${i === 2 ? 'lg:border-l lg:border-[#cbdcd1]' : ''}`}
+              >
+                <dd className="order-1 m-0 font-serif text-[2.6rem] sm:text-5xl lg:text-[3.4rem] leading-none text-primary tracking-tight">
+                  <CountUp value={stat.value} decimals={stat.decimals} suffix={stat.suffix} />
+                  {stat.star && <span className="text-secondary text-[0.6em] align-[0.35em] ml-1">★</span>}
+                </dd>
+                <dt className="order-2 mt-3 text-[0.82rem] sm:text-sm text-on-surface-variant leading-snug max-w-[11rem]">
+                  {stat.label}
+                </dt>
               </div>
+            ))}
+          </dl>
 
-              {/* Pillar 2 */}
-              <div className="group flex items-center gap-3.5 py-1.5 px-3 lg:px-5 rounded-2xl lg:rounded-full cursor-default">
-                <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/25 flex items-center justify-center text-secondary-fixed shadow-[0_4px_14px_rgba(0,0,0,0.15)] group-hover:scale-105 group-hover:bg-secondary-fixed/25 group-hover:border-secondary-fixed/60 group-hover:shadow-[0_6px_20px_rgba(178,240,209,0.35)] transition-all duration-300 shrink-0">
-                  <Route className="w-6 h-6 transition-transform duration-300 group-hover:scale-105" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-[0.93rem] text-white font-semibold tracking-tight group-hover:text-secondary-fixed transition-colors duration-200 whitespace-nowrap">
-                    Tailor-Made Circuits
-                  </h3>
-                  <p className="text-[0.82rem] text-[#c0c8c3] group-hover:text-white transition-colors mt-0.5 leading-snug">
-                    100% Private Chauffeured
-                  </p>
-                </div>
-              </div>
-
-              {/* Pillar 3 */}
-              <div className="group flex items-center gap-3.5 py-1.5 px-3 lg:px-5 rounded-2xl lg:rounded-full cursor-default">
-                <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/25 flex items-center justify-center text-secondary-fixed shadow-[0_4px_14px_rgba(0,0,0,0.15)] group-hover:scale-105 group-hover:bg-secondary-fixed/25 group-hover:border-secondary-fixed/60 group-hover:shadow-[0_6px_20px_rgba(178,240,209,0.35)] transition-all duration-300 shrink-0">
-                  <Armchair className="w-6 h-6 transition-transform duration-300 group-hover:scale-105" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-[0.93rem] text-white font-semibold tracking-tight group-hover:text-secondary-fixed transition-colors duration-200 whitespace-nowrap">
-                    Private &amp; Comfortable
-                  </h3>
-                  <p className="text-[0.82rem] text-[#c0c8c3] group-hover:text-white transition-colors mt-0.5 leading-snug">
-                    Premium Climate Fleet
-                  </p>
-                </div>
-              </div>
-
-              {/* Pillar 4 */}
-              <div className="group flex items-center gap-3.5 py-1.5 px-3 lg:px-5 lg:last:pr-2 rounded-2xl lg:rounded-full cursor-default">
-                <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/25 flex items-center justify-center text-secondary-fixed shadow-[0_4px_14px_rgba(0,0,0,0.15)] group-hover:scale-105 group-hover:bg-secondary-fixed/25 group-hover:border-secondary-fixed/60 group-hover:shadow-[0_6px_20px_rgba(178,240,209,0.35)] transition-all duration-300 shrink-0">
-                  <Headset className="w-6 h-6 transition-transform duration-300 group-hover:scale-105" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-[0.93rem] text-white font-semibold tracking-tight group-hover:text-secondary-fixed transition-colors duration-200 whitespace-nowrap">
-                    24/7 Concierge Care
-                  </h3>
-                  <p className="text-[0.82rem] text-[#c0c8c3] group-hover:text-white transition-colors mt-0.5 leading-snug">
-                    Dedicated Colombo HQ Team
-                  </p>
-                </div>
-              </div>
-            </div>
+          {/* Credentials line */}
+          <div className="reveal-up mt-10 pt-6 border-t border-[#cbdcd1]/80 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[0.72rem] uppercase tracking-[0.18em] text-secondary font-semibold">
+            {TRUST_CREDENTIALS.map(({ icon: Icon, text }) => (
+              <span key={text} className="inline-flex items-center gap-2">
+                <Icon className="w-4 h-4 shrink-0" />
+                {text}
+              </span>
+            ))}
           </div>
         </div>
       </section>
@@ -248,7 +234,7 @@ export default function HomePage() {
                 POPULAR DESTINATIONS
               </span>
               <h2 className="font-serif text-3xl sm:text-4xl text-primary font-normal leading-tight">
-                Explore Sri Lanka
+                <SplitText text="Explore Sri Lanka" />
               </h2>
             </div>
             <p className="text-on-surface-variant text-sm sm:text-base max-w-2xl leading-relaxed">
@@ -311,7 +297,7 @@ export default function HomePage() {
               CURATED SRI LANKA TOURS
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-primary font-normal leading-tight">
-              Popular Tour Packages
+              <SplitText text="Popular Tour Packages" />
             </h2>
             <p className="text-on-surface-variant text-sm sm:text-base max-w-2xl mt-3 leading-relaxed">
               Every tour is 100% private, seamlessly chauffeured by professional English-speaking driver guides, and fully customizable to your pace.
@@ -339,19 +325,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECTION 6: WHY LANKA MEMO HOLIDAYS */}
+      {/* SECTION 6: WHY LEAFLINE CEYLON */}
       <section className="w-full py-24 bg-[#00251a] text-white relative">
         <div className="max-container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="reveal-text">
               <span className="text-xs tracking-[0.2em] uppercase text-secondary-fixed font-semibold block mb-3">
-                WHY CHOOSE LANKA MEMO HOLIDAYS
+                WHY CHOOSE LEAFLINE CEYLON
               </span>
               <h2 className="font-serif text-3xl sm:text-4xl leading-tight mb-6 font-normal">
-                Reliable, Comfortable &amp; Authentic Sri Lanka Tours
+                <SplitText text="Reliable, Comfortable & Authentic Sri Lanka Tours" />
               </h2>
               <p className="text-[#c0c8c3] text-sm sm:text-base leading-relaxed mb-8">
-                We believe your vacation should be stress-free, comfortable, and tailored to what you love. With Lanka Memo Holidays, you have your own dedicated air-conditioned vehicle, an experienced English-speaking chauffeur guide, and complete flexibility every day.
+                We believe your vacation should be stress-free, comfortable, and tailored to what you love. With Leafline Ceylon, you have your own dedicated air-conditioned vehicle, an experienced English-speaking chauffeur guide, and complete flexibility every day.
               </p>
 
               <div className="flex flex-col gap-5">
@@ -389,10 +375,10 @@ export default function HomePage() {
 
             {/* Visual Mosaic / Image */}
             <div className="reveal-image stagger-2 relative rounded-3xl overflow-hidden shadow-2xl h-[360px] sm:h-[420px] lg:h-[480px] max-h-[500px] w-full border border-white/10">
-              <img
+              <ParallaxImage
                 src="/images/ella_scenic_blue_train_portrait.jpg"
                 alt="Scenic Ceylon Blue Train through Tea Country Sri Lanka"
-                className="w-full h-full object-cover object-[center_55%]"
+                className="object-[center_55%]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#00251a]/85 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-6 left-6 right-6 z-10">
@@ -416,16 +402,18 @@ export default function HomePage() {
               TRAVELER REVIEWS
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-primary font-normal leading-tight">
-              What Our Travelers Say
+              <SplitText text="What Our Travelers Say" />
             </h2>
             <div className="flex items-center gap-2 mt-3 text-sm text-on-surface-variant">
-              <div className="flex text-[#eab308]">
+              <div className="flex text-secondary">
                 {'★★★★★'.split('').map((s, i) => (
                   <span key={i}>{s}</span>
                 ))}
               </div>
-              <span className="font-semibold text-on-surface">4.9 / 5.0</span>
-              <span>based on 350+ completed tours</span>
+              <CountUp value={4.9} decimals={1} suffix=" / 5.0" className="font-semibold text-on-surface" />
+              <span>
+                based on <CountUp value={350} suffix="+" /> completed tours
+              </span>
             </div>
           </div>
 
@@ -456,13 +444,21 @@ export default function HomePage() {
       <section className="w-full py-24 bg-surface">
         <div className="max-container">
           <div className="reveal-card bg-[#103c2e] rounded-3xl p-8 sm:p-14 lg:p-16 text-center text-white relative overflow-hidden shadow-2xl">
+            {/* Parallax photo backdrop under a deep green wash keeps the copy legible */}
+            <ParallaxImage
+              src="/images/south_coast_palm_sunset.jpg"
+              alt=""
+              strength={12}
+              className="opacity-40 saturate-[0.8]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#103c2e]/80 via-[#103c2e]/70 to-[#00251a]/90 pointer-events-none" />
             <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(178,240,209,0.12)_0%,transparent_70%)] pointer-events-none" />
             <div className="relative z-10 max-w-3xl mx-auto">
               <span className="reveal-text text-xs tracking-[0.22em] uppercase text-secondary-fixed font-semibold block mb-4">
                 CUSTOM TOUR PLANNING
               </span>
               <h2 className="reveal-text stagger-1 font-serif text-3xl sm:text-4xl lg:text-5xl leading-tight mb-5">
-                Plan Your Dream Sri Lanka Holiday
+                <SplitText text="Plan Your Dream Sri Lanka Holiday" />
               </h2>
               <p className="reveal-text stagger-2 text-base text-[#dde4df] leading-relaxed mb-10 max-w-2xl mx-auto">
                 Tell us where you want to go, what you want to see, and your travel dates. We will design a personalized itinerary with clear, honest pricing within 24 hours.

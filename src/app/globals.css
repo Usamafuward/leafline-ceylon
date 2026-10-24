@@ -35,9 +35,6 @@
   --color-outline: #717974;
   --color-outline-variant: #c0c8c3;
 
-  --color-gold: #d4af37;
-  --color-gold-light: #fbf5e6;
-  --color-gold-dark: #aa851d;
 
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -84,9 +81,6 @@
     --outline: #717974;
     --outline-variant: #c0c8c3;
 
-    --gold: #d4af37;
-    --gold-light: #fbf5e6;
-    --gold-dark: #aa851d;
 
     --font-serif: 'Playfair Display', Georgia, serif;
     --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -114,7 +108,9 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
+    /* clip (not hidden): hidden would turn body into a scroll container and silently
+       break position: sticky (the pinned filter bars) everywhere inside it */
+    overflow-x: clip;
     background-color: var(--surface);
   }
 
@@ -175,12 +171,6 @@
     background-color: rgba(178, 240, 209, 0.2);
     color: var(--secondary-fixed);
     border: 1px solid rgba(178, 240, 209, 0.3);
-  }
-
-  .pill-badge-gold {
-    background-color: var(--gold-light);
-    color: var(--gold-dark);
-    border: 1px solid rgba(212, 175, 55, 0.3);
   }
 
   .pill-badge-surface {
@@ -341,20 +331,38 @@
     animation: pulseGlow 2s infinite ease-in-out;
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar (Chrome, Edge, Safari): deep-green pill thumb on a soft mint track.
+     The track-coloured border insets the thumb so it reads as a slim pill with breathing room. */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 11px;
+    height: 11px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--surface-container-low);
+    background: var(--surface-container);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--outline-variant);
-    border-radius: 4px;
+    background: linear-gradient(180deg, #2e6951 0%, var(--secondary) 100%);
+    border: 3px solid var(--surface-container);
+    border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary);
+    background: linear-gradient(180deg, var(--secondary) 0%, var(--primary-container) 100%);
+  }
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--primary);
+  }
+  ::-webkit-scrollbar-corner {
+    background: var(--surface-container);
+  }
+
+  /* Firefox only: Chrome 121+ ignores the ::-webkit-scrollbar styles above on any element that
+     has scrollbar-color set, so the standard property is scoped to Firefox */
+  @supports (-moz-appearance: none) {
+    html,
+    [data-lenis-prevent] {
+      scrollbar-color: var(--secondary) var(--surface-container);
+      scrollbar-width: thin;
+    }
   }
 
   @media (max-width: 768px) {
@@ -397,18 +405,30 @@
     transform: translate3d(0, 0, 0);
   }
 
-  /* 3. Image Reveal (Gentle Scale + Rise for Photography & Media Cards) */
+  /* 3. Image Reveal (Clip-Path Wipe while the photo settles from a slight zoom).
+     The clip is anchored at the TOP edge on purpose: browsers measure a clipped element's
+     visible area for IntersectionObserver, so the hidden sliver must sit where the element
+     first enters the viewport or the reveal fires late (or never). */
   .reveal-image {
-    opacity: 0;
-    transform: translate3d(0, 24px, 0);
-    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
+    clip-path: inset(0 0 100% 0 round 1.25rem);
+    transform: translate3d(0, 20px, 0);
+    transition: clip-path 0.75s cubic-bezier(0.65, 0, 0.25, 1),
+                transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: clip-path, transform;
+  }
+
+  .reveal-image img {
+    transform: scale(1.1);
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .reveal-image.is-revealed {
-    opacity: 1;
+    clip-path: inset(0 0 0 0 round 1.25rem);
     transform: translate3d(0, 0, 0);
+  }
+
+  .reveal-image.is-revealed img {
+    transform: scale(1);
   }
 
   /* 4. Card Reveal (Destination Cards, Package Cards, Review Cards) */
@@ -453,10 +473,77 @@
     .scroll-reveal,
     .reveal-text,
     .reveal-image,
+    .reveal-image img,
     .reveal-card {
       opacity: 1 !important;
       transform: none !important;
+      clip-path: none !important;
       transition: none !important;
+    }
+  }
+
+  /* ==========================================================================
+     HOMEPAGE HERO (Word Mask Reveal, Slow Ken Burns, Story Progress Bars)
+     ========================================================================== */
+
+  /* True cross-fade: the incoming slide sits on top and fades in over the outgoing one, which stays
+     fully visible underneath until covered (then drops away), so there is never a dim gap where the
+     dark page background shows through. The active slide zooms slowly for longer than it is shown,
+     so it is still drifting when the next one fades in; inactive slides reset their zoom unseen. */
+  .hero-slide {
+    opacity: 0;
+    z-index: 0;
+    transform: scale(1);
+    transition: opacity 0.3s linear 1.4s, transform 0s linear 1.8s;
+  }
+
+  .hero-slide.is-active {
+    opacity: 1;
+    z-index: 1;
+    transform: scale(1.12);
+    transition: opacity 1.4s ease, transform 8s cubic-bezier(0.25, 0.4, 0.4, 1);
+  }
+
+  /* Supporting hero elements fade up in sequence around the headline's letter reveal */
+  .hero-enter {
+    animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--hero-delay, 0s);
+  }
+
+  /* Re-keyed on every slide change so the tag & caption swap in gently */
+  .hero-swap {
+    animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes heroFadeUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 16px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  /* Progress-bar fill (used by the Signature Experiences slider timeline) */
+  @keyframes heroProgress {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  /* Reduced motion: no zoom and no fade-ups (autoplay is also skipped, see app/page.tsx) */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slide,
+    .hero-slide.is-active {
+      transform: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .hero-enter,
+    .hero-swap {
+      animation: none;
     }
   }
 
@@ -487,3 +574,302 @@
   }
 }
 
+
+/* ==========================================================================
+   VIEW TRANSITIONS (Package card photo morphs into the package detail header)
+   ========================================================================== */
+
+::view-transition-group(.tour-morph) {
+  animation-duration: 600ms;
+  animation-timing-function: cubic-bezier(0.65, 0, 0.2, 1);
+}
+
+/* Card photo and detail header have different aspect ratios: fill the moving box instead of stretching */
+::view-transition-old(.tour-morph),
+::view-transition-new(.tour-morph) {
+  height: 100%;
+  object-fit: cover;
+}
+
+::view-transition-image-pair(.tour-morph) {
+  animation-name: tour-morph-blur;
+}
+
+@keyframes tour-morph-blur {
+  35% {
+    filter: blur(4px);
+  }
+}
+
+/* Detail header content rises in above the morphing photo once it lands */
+::view-transition-new(.tour-header-enter) {
+  animation: tour-header-rise 500ms cubic-bezier(0.16, 1, 0.3, 1) 280ms both;
+}
+
+@keyframes tour-header-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================================
+   WHATSAPP CONCIERGE (Pop-in panel & nudge, attention ring on the button)
+   ========================================================================== */
+
+.chat-pop-in {
+  transform-origin: bottom right;
+  animation: chat-pop-in 420ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+@keyframes chat-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Two soft rings ripple out from the button while the nudge is showing */
+.chat-ring::before,
+.chat-ring::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid #25d366;
+  animation: chat-ring 2.4s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+  pointer-events: none;
+}
+
+.chat-ring::after {
+  animation-delay: 1.2s;
+}
+
+@keyframes chat-ring {
+  from {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-pop-in,
+  .chat-ring::before,
+  .chat-ring::after {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   MAP ROUTES (Pins drop in as the vehicle arrives, see components/MapRoute.tsx)
+   ========================================================================== */
+
+.map-stop {
+  opacity: 0;
+  transform: scale(0.2);
+  transition: opacity 0.2s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.map-stop.is-reached {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.map-stop-ripple {
+  fill: none;
+  stroke: #3a9d74;
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: map-stop-ripple 0.9s ease-out forwards;
+}
+
+@keyframes map-stop-ripple {
+  from {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(3.2);
+  }
+}
+
+/* A small bounce so the tuk-tuk or train feels like it is moving over the road */
+.map-vehicle-bob {
+  animation: map-vehicle-bob 0.3s ease-in-out infinite alternate;
+}
+
+@keyframes map-vehicle-bob {
+  to {
+    transform: translateY(-1.5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-stop {
+    transition: none;
+  }
+
+  .map-stop-ripple,
+  .map-vehicle-bob {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   SIGNATURE EXPERIENCES SLIDER (Segmented timer & rolling slide number)
+   ========================================================================== */
+
+/* Same 6s fill as the hero; the active segment's animationend advances the slider */
+.sig-progress {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.sig-progress.is-done {
+  transform: scaleX(1);
+}
+
+.sig-progress.is-active {
+  animation: heroProgress 6s linear forwards;
+}
+
+.sig-slider[data-paused='true'] .sig-progress.is-active {
+  animation-play-state: paused;
+}
+
+.sig-index-roll {
+  animation: sig-index-roll 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes sig-index-roll {
+  from {
+    opacity: 0;
+    transform: translateY(70%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduced motion: no timer (so no autoplay) and no number roll; arrows & segments still switch slides */
+@media (prefers-reduced-motion: reduce) {
+  .sig-progress.is-active {
+    animation: none;
+    transform: scaleX(1);
+  }
+
+  .sig-index-roll {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   INNER PAGE HERO (components/PageHero.tsx) & SHARED MODAL ANIMATION HELPERS
+   ========================================================================== */
+
+/* The header photo settles from a slight zoom on page load */
+.page-hero-zoom {
+  animation: page-hero-zoom 2.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes page-hero-zoom {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-hero-zoom {
+    animation: none;
+  }
+}
+
+/* Mobile navigation drawer drops in below the header */
+.menu-drop-in {
+  transform-origin: top center;
+  animation: menu-drop-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes menu-drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-drop-in {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   LETTER-BY-LETTER HEADING REVEAL (components/ui/SplitText.tsx)
+   ========================================================================== */
+
+.split-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.split-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.45em) rotate(4deg);
+  filter: blur(6px);
+}
+
+.split-text.is-in .split-char {
+  animation: split-char-in 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes split-char-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+    filter: blur(0);
+  }
+}
+
+/* Reduced motion: headings simply appear */
+@media (prefers-reduced-motion: reduce) {
+  .split-char {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .split-text.is-in .split-char {
+    animation: none;
+  }
+}

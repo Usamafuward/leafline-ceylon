@@ -1,10 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import SplitText from '@/components/ui/SplitText';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import { DESTINATIONS_DATA, Destination } from '@/data/destinations';
 import DestinationCard from '@/components/DestinationCard';
 import { ChevronDown, X, Sun, ArrowRight, Sunset } from 'lucide-react';
+import PageHero from '@/components/PageHero';
+import useScrollLock from '@/components/ui/useScrollLock';
+import { gridItemMotion } from '@/components/ui/gridMotion';
+import predecodeImage from '@/components/ui/predecodeImage';
 
 const REGION_TABS = [
   { id: 'all', label: 'All Destinations (6)' },
@@ -18,6 +24,17 @@ export default function DestinationsPage() {
   const [selectedRegion, setSelectedRegion] = useState('all');
   const [activeDestination, setActiveDestination] = useState<Destination | null>(null);
 
+  // Lock the page behind the open modal, and let Escape close it
+  useScrollLock(activeDestination !== null);
+  useEffect(() => {
+    if (!activeDestination) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveDestination(null);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [activeDestination]);
+
   const filtered = selectedRegion === 'all'
     ? DESTINATIONS_DATA
     : DESTINATIONS_DATA.filter((d) => {
@@ -30,42 +47,19 @@ export default function DestinationsPage() {
 
   return (
     <div className="flex flex-col w-full">
-      {/* 1. CINEMATIC HERO BANNER */}
-      <section className="w-full bg-[#00251a] text-white pt-28 sm:pt-32 pb-16 relative overflow-hidden">
-        <img
-          src="/images/sigiriya_rock_ancient_steps_sunset.jpg"
-          alt="Sigiriya Citadel"
-          className="absolute inset-0 w-full h-full object-cover object-[center_40%] opacity-30 saturate-[0.85] pointer-events-none"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#00251a]/85 via-[#103c2e]/60 to-[#00251a]/95 pointer-events-none" />
-
-        <div className="max-container relative z-10">
-          {/* Breadcrumb */}
-          <nav className="reveal-text flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-secondary-fixed mb-5">
-            <Link href="/" className="text-[#d8e5dd] hover:text-white transition-colors no-underline">
-              Home
-            </Link>
-            <span className="opacity-40">/</span>
-            <span className="text-white font-semibold">Destinations</span>
-          </nav>
-
-          <span className="reveal-text inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[11px] tracking-[0.2em] uppercase text-secondary-fixed font-semibold mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-secondary-fixed" />
-            ISLAND SANCTUARIES &amp; REGIONS
-          </span>
-
-          <h1 className="reveal-text stagger-1 font-serif text-[clamp(2.2rem,4.4vw,3.6rem)] font-normal leading-[1.18] max-w-4xl mb-4">
-            The Diverse Realms of Sri Lanka
-          </h1>
-
-          <p className="reveal-text stagger-2 text-[#f0f5f2] text-sm sm:text-base max-w-3xl leading-relaxed font-light">
-            Within just four hours of scenic travel, transition from golden Indian Ocean shores to 2,000-meter alpine cloud forests and ancient UNESCO kingdom citadels.
-          </p>
-        </div>
-      </section>
+      {/* 1. PHOTO HERO (shared across inner pages) */}
+      <PageHero
+        crumb="Destinations"
+        eyebrow="Island Sanctuaries & Regions"
+        title="The Diverse Realms of Sri Lanka"
+        description="Within just four hours of scenic travel, transition from golden Indian Ocean shores to 2,000-meter alpine cloud forests and ancient UNESCO kingdom citadels."
+        image="/images/sigiriya_rock_ancient_steps_sunset.jpg"
+        imageAlt="Ancient steps of Sigiriya Rock at sunset"
+        imagePosition="center 40%"
+      />
 
       {/* 2. REFINED FILTER BAR */}
-      <section className="w-full bg-white border-b border-[#e3eae5] z-30 backdrop-blur-md py-3.5 shadow-xs">
+      <section className="w-full bg-white/95 border-b border-[#e3eae5] z-30 backdrop-blur-md py-3.5 shadow-xs">
         <div className="max-container">
           {/* Mobile Styled Dropdown */}
           <div className="relative md:hidden w-full max-w-sm">
@@ -109,140 +103,188 @@ export default function DestinationsPage() {
       <section className="w-full py-16 sm:py-20 bg-[#edf4ef]">
         <div className="max-container">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filtered.map((dest, idx) => (
-              <div key={dest.id} id={dest.slug} className={`reveal-card stagger-${(idx % 3) + 1} h-full`}>
-                <DestinationCard
-                  destination={dest}
-                  onClick={() => setActiveDestination(dest)}
-                />
-              </div>
-            ))}
+            <AnimatePresence mode="popLayout">
+              {filtered.map((dest, idx) => (
+                <motion.div key={dest.id} id={dest.slug} className="h-full" {...gridItemMotion(idx)}>
+                  <DestinationCard
+                    destination={dest}
+                    onClick={async () => {
+                      // Decode first so the morphing header photo is never blank mid-flight
+                      await predecodeImage(dest.heroImage);
+                      setActiveDestination(dest);
+                    }}
+                    photoLayoutId={`destination-photo-${dest.id}`}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </div>
       </section>
 
-      {/* 4. DETAIL MODAL */}
-      {activeDestination && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          onClick={() => setActiveDestination(null)}
-          className="fixed inset-0 z-50 bg-[#00251a]/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
-        >
+      {/* 4. DETAIL MODAL: the clicked card's photo morphs into the header, the body slides up,
+          and the page behind is locked while it is open */}
+      <AnimatePresence>
+        {activeDestination && (
           <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative border border-[#e3eae5]"
+            key="destination-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="destination-modal-title"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
           >
-            {/* Modal Image Header */}
-            <div className="relative w-full h-64 sm:h-72 bg-[#00251a]">
-              <img
-                src={activeDestination.heroImage}
-                alt={activeDestination.name}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+            {/* Backdrop */}
+            <motion.div
+              className="absolute inset-0 bg-[#00251a]/85"
+              onClick={() => setActiveDestination(null)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.3 } }}
+              transition={{ duration: 0.35 }}
+            />
 
-              {/* Close Button */}
-              <button
-                type="button"
-                onClick={() => setActiveDestination(null)}
-                aria-label="Close modal"
-                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 backdrop-blur-md text-white border border-white/20 flex items-center justify-center cursor-pointer transition-colors hover:bg-black/75 z-10"
+            <div className="relative max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl rounded-2xl">
+              {/* Header: photo is the shared element (no overflow clipping above it, so the morph stays visible) */}
+              <div className="relative w-full h-64 sm:h-72 shrink-0">
+                <motion.div
+                  layoutId={`destination-photo-${activeDestination.id}`}
+                  className="absolute inset-0 overflow-hidden bg-[#00251a]"
+                  style={{
+                    borderTopLeftRadius: 16,
+                    borderTopRightRadius: 16,
+                    borderBottomLeftRadius: 0,
+                    borderBottomRightRadius: 0,
+                  }}
+                  transition={{ type: 'spring', bounce: 0, visualDuration: 0.55 }}
+                >
+                  <img
+                    src={activeDestination.heroImage}
+                    alt={activeDestination.name}
+                    decoding="sync"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+                </motion.div>
+
+                {/* Header overlay copy fades in once the photo has landed */}
+                <motion.div
+                  className="absolute inset-0"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, transition: { duration: 0.35, delay: 0.45 } }}
+                  exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                >
+                  {/* Close Button */}
+                  <button
+                    type="button"
+                    autoFocus
+                    onClick={() => setActiveDestination(null)}
+                    aria-label="Close modal"
+                    className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 backdrop-blur-md text-white border border-white/20 flex items-center justify-center cursor-pointer transition-colors hover:bg-black/75 z-10"
+                  >
+                    <X className="w-4.5 h-4.5" />
+                  </button>
+
+                  {/* Header Badges & Title */}
+                  <div className="absolute bottom-5 left-6 right-6 text-white">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="px-3 py-0.5 rounded-full bg-[#00251a]/80 backdrop-blur-sm text-secondary-fixed text-[11px] font-semibold uppercase tracking-wider">
+                        {activeDestination.region}
+                      </span>
+                      <span className="px-3 py-0.5 rounded-full bg-white/20 backdrop-blur-sm text-white text-[11px] font-medium">
+                        Optimal Stay: {activeDestination.recommendedNights} Nights
+                      </span>
+                    </div>
+                    <h2 id="destination-modal-title" className="font-serif text-2xl sm:text-3xl font-normal m-0 text-white">
+                      {activeDestination.name}
+                    </h2>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Modal Body Content (scrolls on its own; slides up once the photo has landed, so no empty panel shows early) */}
+              <motion.div
+                data-lenis-prevent
+                className="bg-white rounded-b-2xl border border-t-0 border-[#e3eae5] flex-1 min-h-0 overflow-y-auto"
+                initial={{ opacity: 0, y: 32 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.4, ease: [0.16, 1, 0.3, 1] } }}
+                exit={{ opacity: 0, transition: { duration: 0.1 } }}
               >
-                <X className="w-4.5 h-4.5" />
-              </button>
+              <div className="p-6 sm:p-7 flex flex-col gap-5">
+                <span className="text-xs text-secondary font-semibold uppercase tracking-wider block">
+                  {activeDestination.subtitle}
+                </span>
 
-              {/* Header Badges & Title */}
-              <div className="absolute bottom-5 left-6 right-6 text-white">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <span className="px-3 py-0.5 rounded-full bg-[#00251a]/80 backdrop-blur-sm text-secondary-fixed text-[11px] font-semibold uppercase tracking-wider">
-                    {activeDestination.region}
-                  </span>
-                  <span className="px-3 py-0.5 rounded-full bg-white/20 backdrop-blur-sm text-white text-[11px] font-medium">
-                    Optimal Stay: {activeDestination.recommendedNights} Nights
-                  </span>
-                </div>
-                <h2 className="font-serif text-2xl sm:text-3xl font-normal m-0 text-white">
-                  {activeDestination.name}
-                </h2>
-              </div>
-            </div>
+                <p className="text-sm text-on-surface-variant leading-relaxed">
+                  {activeDestination.description}
+                </p>
 
-            {/* Modal Body Content */}
-            <div className="p-6 sm:p-7 flex flex-col gap-5">
-              <span className="text-xs text-secondary font-semibold uppercase tracking-wider block">
-                {activeDestination.subtitle}
-              </span>
-
-              <p className="text-sm text-on-surface-variant leading-relaxed">
-                {activeDestination.description}
-              </p>
-
-              {/* Best Season */}
-              <div className="p-4 bg-[#edf4ef] rounded-xl flex items-center gap-3">
-                <Sun className="w-5 h-5 text-secondary shrink-0" />
-                <div>
-                  <span className="text-xs uppercase tracking-wider text-outline font-semibold block">
-                    Optimal Travel Season
-                  </span>
-                  <span className="text-sm font-medium text-primary">
-                    {activeDestination.bestTime}
-                  </span>
-                </div>
-              </div>
-
-              {/* Highlights & Key Experiences */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 py-2">
-                <div>
-                  <h4 className="font-serif text-base text-primary mb-2.5 font-semibold">
-                    Highlights
-                  </h4>
-                  <ul className="space-y-2">
-                    {activeDestination.highlights.map((hl, i) => (
-                      <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-on-surface-variant leading-snug">
-                        <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0" />
-                        <span>{hl}</span>
-                      </li>
-                    ))}
-                  </ul>
+                {/* Best Season */}
+                <div className="p-4 bg-[#edf4ef] rounded-xl flex items-center gap-3">
+                  <Sun className="w-5 h-5 text-secondary shrink-0" />
+                  <div>
+                    <span className="text-xs uppercase tracking-wider text-outline font-semibold block">
+                      Optimal Travel Season
+                    </span>
+                    <span className="text-sm font-medium text-primary">
+                      {activeDestination.bestTime}
+                    </span>
+                  </div>
                 </div>
 
-                <div>
-                  <h4 className="font-serif text-base text-primary mb-2.5 font-semibold">
-                    Signature Experiences
-                  </h4>
-                  <ul className="space-y-2">
-                    {activeDestination.keyExperiences.map((exp, i) => (
-                      <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-on-surface-variant leading-snug">
-                        <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0" />
-                        <span>{exp}</span>
-                      </li>
-                    ))}
-                  </ul>
+                {/* Highlights & Key Experiences */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 py-2">
+                  <div>
+                    <h4 className="font-serif text-base text-primary mb-2.5 font-semibold">
+                      Highlights
+                    </h4>
+                    <ul className="space-y-2">
+                      {activeDestination.highlights.map((hl, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-on-surface-variant leading-snug">
+                          <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0" />
+                          <span>{hl}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="font-serif text-base text-primary mb-2.5 font-semibold">
+                      Signature Experiences
+                    </h4>
+                    <ul className="space-y-2">
+                      {activeDestination.keyExperiences.map((exp, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-on-surface-variant leading-snug">
+                          <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0" />
+                          <span>{exp}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-[#e3eae5]">
+                  <Link
+                    href="/packages"
+                    className="bg-primary hover:bg-secondary text-white px-6 py-2.5 rounded-full font-medium text-xs sm:text-sm inline-flex items-center gap-2 transition-colors duration-200 no-underline"
+                  >
+                    <span>Explore Packages Visiting Here</span>
+                    <ArrowRight className="w-4 h-4 shrink-0" />
+                  </Link>
+
+                  <Link
+                    href="/plan-trip"
+                    className="bg-white hover:bg-[#edf4ef] text-primary border border-surface-container px-6 py-2.5 rounded-full font-medium text-xs sm:text-sm inline-flex items-center gap-2 transition-colors duration-200 no-underline"
+                  >
+                    <span>Add to Custom Itinerary</span>
+                  </Link>
                 </div>
               </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-[#e3eae5]">
-                <Link
-                  href="/packages"
-                  className="bg-primary hover:bg-secondary text-white hover:text-primary px-6 py-2.5 rounded-full font-medium text-xs sm:text-sm inline-flex items-center gap-2 transition-colors duration-200 no-underline"
-                >
-                  <span>Explore Packages Visiting Here</span>
-                  <ArrowRight className="w-4 h-4 shrink-0" />
-                </Link>
-
-                <Link
-                  href="/plan-trip"
-                  className="bg-white hover:bg-[#edf4ef] text-primary border border-surface-container px-6 py-2.5 rounded-full font-medium text-xs sm:text-sm inline-flex items-center gap-2 transition-colors duration-200 no-underline"
-                >
-                  <span>Add to Custom Itinerary</span>
-                </Link>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
 
       {/* 5. SRI LANKA WEATHER & MONSOONS GUIDE */}
       <section className="w-full py-20 bg-white">
@@ -252,7 +294,7 @@ export default function DestinationsPage() {
               LOCAL CLIMATE GUIDE
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-primary font-normal leading-tight mb-3">
-              When is the Best Time to Visit Sri Lanka?
+              <SplitText text="When is the Best Time to Visit Sri Lanka?" />
             </h2>
             <p className="text-on-surface-variant text-sm sm:text-base leading-relaxed">
               Because Sri Lanka is influenced by two distinct monsoon cycles on opposing coasts, there is warm tropical sunshine somewhere on the island 365 days a year.

@@ -24,7 +24,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
               {Array.from({ length: review.rating }).map((_, i) => (
                 <Star
                   key={i}
-                  className="w-4 h-4 text-amber-500 fill-amber-500 shrink-0"
+                  className="w-4 h-4 text-secondary fill-secondary shrink-0"
                 />
               ))}
             </div>

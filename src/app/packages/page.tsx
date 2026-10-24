@@ -1,9 +1,16 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import SplitText from '@/components/ui/SplitText';
+import React, { useState, useMemo, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { TOURS_DATA } from '@/data/tours';
 import PackageCard from '@/components/PackageCard';
+import { useCurrency } from '@/context/CurrencyContext';
+import PageHero from '@/components/PageHero';
+import { motion, AnimatePresence } from 'motion/react';
+import { gridItemMotion } from '@/components/ui/gridMotion';
+import CountUp from '@/components/ui/CountUp';
 import {
   Search,
   X,
@@ -64,13 +71,38 @@ const FAQS = [
   },
 ];
 
-export default function PackagesPage() {
-  const [searchTerm, setSearchTerm] = useState('');
+function PackagesContent() {
+  const { formatPrice } = useCurrency();
+  const searchParams = useSearchParams();
+
+  const paramStyle = searchParams.get('style');
+  const paramDuration = searchParams.get('duration');
+  const paramSearch = searchParams.get('q') || '';
+
+  const [searchTerm, setSearchTerm] = useState(paramSearch);
   const [regionFilter, setRegionFilter] = useState('all');
-  const [durationFilter, setDurationFilter] = useState('all');
-  const [styleFilter, setStyleFilter] = useState('all');
+  const [durationFilter, setDurationFilter] = useState(
+    paramDuration && DURATION_OPTIONS.some((d) => d.value === paramDuration)
+      ? paramDuration
+      : 'all'
+  );
+  const [styleFilter, setStyleFilter] = useState(
+    paramStyle && STYLE_TABS.some((s) => s.id === paramStyle) ? paramStyle : 'all'
+  );
   const [sortBy, setSortBy] = useState('recommended');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (paramStyle && STYLE_TABS.some((s) => s.id === paramStyle)) {
+      setStyleFilter(paramStyle);
+    }
+    if (paramDuration && DURATION_OPTIONS.some((d) => d.value === paramDuration)) {
+      setDurationFilter(paramDuration);
+    }
+    if (paramSearch) {
+      setSearchTerm(paramSearch);
+    }
+  }, [paramStyle, paramDuration, paramSearch]);
 
   const isFiltered =
     searchTerm.trim() !== '' ||
@@ -128,42 +160,19 @@ export default function PackagesPage() {
 
   return (
     <div className="flex flex-col w-full">
-      {/* 1. CINEMATIC HERO BANNER */}
-      <section className="w-full bg-[#00251a] text-white pt-28 sm:pt-32 pb-16 relative overflow-hidden">
-        <img
-          src="/images/nuwara_eliya_tea_estate_morning_clouds.jpg"
-          alt="Tea Trails Expeditions"
-          className="absolute inset-0 w-full h-full object-cover object-[center_35%] opacity-30 saturate-[0.85] pointer-events-none"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#00251a]/85 via-[#103c2e]/60 to-[#00251a]/95 pointer-events-none" />
-
-        <div className="max-container relative z-10">
-          {/* Breadcrumb */}
-          <nav className="reveal-text flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-secondary-fixed mb-5">
-            <Link href="/" className="text-[#d8e5dd] hover:text-white transition-colors no-underline">
-              Home
-            </Link>
-            <span className="opacity-40">/</span>
-            <span className="text-white font-semibold">Packages</span>
-          </nav>
-
-          <span className="reveal-text inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[11px] tracking-[0.2em] uppercase text-secondary-fixed font-semibold mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-secondary-fixed" />
-            CURATED PRIVATE CIRCUITS
-          </span>
-
-          <h1 className="reveal-text stagger-1 font-serif text-[clamp(2.2rem,4.4vw,3.6rem)] font-normal leading-[1.18] max-w-4xl mb-4">
-            Private Sri Lanka Tour Packages
-          </h1>
-
-          <p className="reveal-text stagger-2 text-[#f0f5f2] text-sm sm:text-base max-w-3xl leading-relaxed font-light">
-            Thoughtfully planned private itineraries featuring ancient UNESCO fortresses, emerald tea estates, wild elephant safaris, and golden sandy beaches. Every journey is fully customizable.
-          </p>
-        </div>
-      </section>
+      {/* 1. PHOTO HERO (shared across inner pages) */}
+      <PageHero
+        crumb="Packages"
+        eyebrow="Curated Private Circuits"
+        title="Private Sri Lanka Tour Packages"
+        description="Thoughtfully planned private itineraries featuring ancient UNESCO fortresses, emerald tea estates, wild elephant safaris, and golden sandy beaches. Every journey is fully customizable."
+        image="/images/nuwara_eliya_tea_estate_morning_clouds.jpg"
+        imageAlt="Tea estates of Nuwara Eliya in morning cloud"
+        imagePosition="center 35%"
+      />
 
       {/* 2. REFINED FILTER & SEARCH SUITE WITH APP-THEMED DROPDOWNS */}
-      <section className="w-full bg-white z-30 backdrop-blur-md border-b border-[#e3eae5] shadow-xs py-4">
+      <section className="w-full bg-white/95 z-30 backdrop-blur-md border-b border-[#e3eae5] shadow-xs py-4">
         <div className="max-container flex flex-col gap-3">
           {/* Row 1: Search & Themed Dropdown Controls */}
           <div className="flex flex-wrap gap-2.5 items-center justify-between">
@@ -337,7 +346,7 @@ export default function PackagesPage() {
                       {featuredTour.duration}
                     </span>
                     <span className="text-outline-variant">•</span>
-                    <span className="text-xs text-amber-700 font-semibold">
+                    <span className="text-xs text-secondary font-semibold">
                       ★ {featuredTour.rating} ({featuredTour.reviewsCount} Reviews)
                     </span>
                   </div>
@@ -366,7 +375,7 @@ export default function PackagesPage() {
                       From
                     </span>
                     <span className="text-2xl font-serif font-normal text-primary">
-                      ${featuredTour.pricePerPerson.toLocaleString()}
+                      {formatPrice(featuredTour.pricePerPerson)}
                       <span className="text-xs font-sans text-outline font-normal ml-1">/ person</span>
                     </span>
                   </div>
@@ -395,7 +404,7 @@ export default function PackagesPage() {
                 {isFiltered ? 'Matching Expeditions' : 'Curated Private Tour Packages'}
               </h2>
               <p className="text-xs sm:text-sm text-on-surface-variant mt-1 mb-0">
-                Showing <strong>{filteredTours.length}</strong> private circuits &bull; 100% customizable
+                Showing <strong><CountUp key={filteredTours.length} value={filteredTours.length} duration={0.6} /></strong> private circuits &bull; 100% customizable
               </p>
             </div>
 
@@ -427,11 +436,13 @@ export default function PackagesPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredTours.map((tour, idx) => (
-                <div key={tour.id} id={tour.slug} className={`reveal-card stagger-${(idx % 3) + 1} h-full`}>
-                  <PackageCard tour={tour} />
-                </div>
-              ))}
+              <AnimatePresence mode="popLayout">
+                {filteredTours.map((tour, idx) => (
+                  <motion.div key={tour.id} id={tour.slug} className="h-full" {...gridItemMotion(idx)}>
+                    <PackageCard tour={tour} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           )}
         </div>
@@ -445,7 +456,7 @@ export default function PackagesPage() {
               PLANNING GUIDANCE
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-primary font-normal leading-tight">
-              Frequently Asked Questions
+              <SplitText text="Frequently Asked Questions" />
             </h2>
           </div>
 
@@ -497,7 +508,7 @@ export default function PackagesPage() {
                 CUSTOM TOUR PLANNING
               </span>
               <h2 className="reveal-text stagger-1 font-serif text-3xl sm:text-4xl lg:text-5xl leading-tight mb-5">
-                Prefer a Custom Private Itinerary?
+                <SplitText text="Prefer a Custom Private Itinerary?" />
               </h2>
               <p className="reveal-text stagger-2 text-base text-[#dde4df] leading-relaxed mb-10 max-w-2xl mx-auto">
                 Tell us where you want to go, what you want to see, and your travel dates. We will design a personalized itinerary with clear, honest pricing within 24 hours.
@@ -521,5 +532,13 @@ export default function PackagesPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function PackagesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#00251a]" />}>
+      <PackagesContent />
+    </Suspense>
   );
 }

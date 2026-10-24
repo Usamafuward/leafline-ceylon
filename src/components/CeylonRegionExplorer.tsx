@@ -1,10 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import SplitText from '@/components/ui/SplitText';
+import React, { useRef, useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useInView } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import SRI_LANKA_PATHS from '@/data/sri_lanka_map_paths.json';
+import MapRoute from '@/components/MapRoute';
+import { townStop, RouteStop } from '@/data/mapGeo';
 
 export interface TravelRegion {
   id: string;
@@ -17,8 +20,8 @@ export interface TravelRegion {
   keyDestinations: string;
   highlights: string[];
   packageFilter: string;
-  mainPin: { x: number; y: number; label: string };
-  secondaryPins?: Array<{ x: number; y: number; label: string }>;
+  // Suggested touring order; drawn as an animated route when the region is selected
+  route: RouteStop[];
 }
 
 export const CEYLON_REGIONS: TravelRegion[] = [
@@ -38,11 +41,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
       'Wild elephant gatherings in Minneriya National Park',
     ],
     packageFilter: '/packages?region=cultural',
-    mainPin: { x: 285, y: 380, label: 'Sigiriya' },
-    secondaryPins: [
-      { x: 235, y: 310, label: 'Anuradhapura' },
-      { x: 355, y: 375, label: 'Polonnaruwa' },
-    ],
+    route: [townStop('Anuradhapura'), townStop('Sigiriya', { main: true }), townStop('Polonnaruwa')],
   },
   {
     id: 'mountainous-region',
@@ -60,11 +59,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
       'Colonial tea estate stays & factory tastings',
     ],
     packageFilter: '/packages?region=highlands',
-    mainPin: { x: 260, y: 535, label: 'Kandy' },
-    secondaryPins: [
-      { x: 300, y: 595, label: 'Nuwara Eliya' },
-      { x: 375, y: 645, label: 'Ella' },
-    ],
+    route: [townStop('Kandy', { main: true }), townStop('Nuwara Eliya'), townStop('Ella')],
   },
   {
     id: 'the-south',
@@ -82,11 +77,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
       'Whale and dolphin boat excursions in Mirissa',
     ],
     packageFilter: '/packages?region=south',
-    mainPin: { x: 200, y: 815, label: 'Galle' },
-    secondaryPins: [
-      { x: 250, y: 835, label: 'Mirissa' },
-      { x: 420, y: 810, label: 'Yala' },
-    ],
+    route: [townStop('Galle', { main: true }), townStop('Mirissa'), townStop('Yala')],
   },
   {
     id: 'east-coast',
@@ -104,11 +95,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
       'Trincomalee natural harbor & Koneswaram temple',
     ],
     packageFilter: '/packages?region=east',
-    mainPin: { x: 410, y: 285, label: 'Trincomalee' },
-    secondaryPins: [
-      { x: 520, y: 470, label: 'Batticaloa' },
-      { x: 560, y: 615, label: 'Arugam Bay' },
-    ],
+    route: [townStop('Trincomalee', { main: true }), townStop('Batticaloa'), townStop('Arugam Bay')],
   },
   {
     id: 'west-coast',
@@ -126,10 +113,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
       'Untouched wilderness safaris in Wilpattu National Park',
     ],
     packageFilter: '/packages?region=west',
-    mainPin: { x: 140, y: 460, label: 'Negombo' },
-    secondaryPins: [
-      { x: 125, y: 260, label: 'Kalpitiya' },
-    ],
+    route: [townStop('Kalpitiya'), townStop('Negombo', { main: true })],
   },
   {
     id: 'colombo-environs',
@@ -147,10 +131,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
       'World-renowned seafood dining and colonial street heritage',
     ],
     packageFilter: '/packages?region=colombo',
-    mainPin: { x: 145, y: 645, label: 'Colombo' },
-    secondaryPins: [
-      { x: 235, y: 685, label: 'Ratnapura' },
-    ],
+    route: [townStop('Colombo', { main: true }), townStop('Ratnapura')],
   },
   {
     id: 'jaffna-north',
@@ -168,10 +149,7 @@ export const CEYLON_REGIONS: TravelRegion[] = [
       'Historic Jaffna Dutch Fort overlooking the lagoon',
     ],
     packageFilter: '/packages?region=north',
-    mainPin: { x: 219, y: 75, label: 'Jaffna' },
-    secondaryPins: [
-      { x: 235, y: 155, label: 'Kilinochchi' },
-    ],
+    route: [townStop('Jaffna', { main: true }), townStop('Kilinochchi')],
   },
 ];
 
@@ -179,6 +157,9 @@ export default function CeylonRegionExplorer() {
   const [selectedRegionId, setSelectedRegionId] = useState<string>('cultural-triangle');
   const [hoveredRegionId, setHoveredRegionId] = useState<string | null>(null);
   const [hasInteracted, setHasInteracted] = useState<boolean>(false);
+  // The first route waits until the map is actually on screen
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapInView = useInView(mapRef, { once: true, amount: 0.4 });
 
   const selectRegion = (id: string) => {
     setHasInteracted(true);
@@ -231,7 +212,7 @@ export default function CeylonRegionExplorer() {
               REGIONS OF SRI LANKA
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-primary font-normal leading-tight">
-              Explore by Region
+              <SplitText text="Explore by Region" />
             </h2>
           </div>
           <p className="text-on-surface-variant text-sm sm:text-base max-w-2xl leading-relaxed">
@@ -334,7 +315,7 @@ export default function CeylonRegionExplorer() {
                 <div className="pt-2 mt-auto">
                   <Link
                     href={activeRegion.packageFilter}
-                    className="inline-flex items-center gap-2 bg-primary hover:bg-secondary text-white hover:text-primary px-6 py-3 rounded-full text-sm font-medium transition-colors duration-200 no-underline"
+                    className="inline-flex items-center gap-2 bg-primary hover:bg-secondary text-white px-6 py-3 rounded-full text-sm font-medium transition-colors duration-200 no-underline"
                   >
                     <span>Explore {activeRegion.shortName} Tours</span>
                     <ArrowRight className="w-[18px] h-[18px]" />
@@ -356,7 +337,10 @@ export default function CeylonRegionExplorer() {
             </div>
 
             {/* Clean Vector Map - Zoomed & Perfectly Proportioned */}
-            <div className="relative w-full flex-1 flex items-center justify-center my-auto select-none py-2 min-h-[440px] lg:min-h-[500px] max-w-[400px]">
+            <div
+              ref={mapRef}
+              className="relative w-full flex-1 flex items-center justify-center my-auto select-none py-2 min-h-[440px] lg:min-h-[500px] max-w-[400px]"
+            >
               <svg
                 viewBox="75 0 575 875"
                 className="w-full h-full max-h-[550px] overflow-visible object-contain drop-shadow-xs"
@@ -470,57 +454,8 @@ export default function CeylonRegionExplorer() {
                   />
                 </g>
 
-                {/* Location Dot for Active Region */}
-                <g className="pointer-events-none">
-                  <circle
-                    cx={activeRegion.mainPin.x}
-                    cy={activeRegion.mainPin.y}
-                    r="6.5"
-                    fill="#ffffff"
-                    stroke="#0c5037"
-                    strokeWidth="2.5"
-                  />
-                  <circle
-                    cx={activeRegion.mainPin.x}
-                    cy={activeRegion.mainPin.y}
-                    r="2.5"
-                    fill="#0c5037"
-                  />
-                  <text
-                    x={activeRegion.mainPin.x + 10}
-                    y={activeRegion.mainPin.y + 4}
-                    fontSize="13"
-                    fontWeight="700"
-                    fill="#ffffff"
-                    className="drop-shadow-[0_1px_3px_rgba(0,37,26,0.95)]"
-                  >
-                    {activeRegion.mainPin.label}
-                  </text>
-                </g>
-
-                {/* Secondary City Labels for Active Region */}
-                {activeRegion.secondaryPins?.map((pin, idx) => (
-                  <g key={`sec-pin-${idx}`} className="pointer-events-none">
-                    <circle
-                      cx={pin.x}
-                      cy={pin.y}
-                      r="4"
-                      fill="#ffffff"
-                      stroke="#0c5037"
-                      strokeWidth="1.8"
-                    />
-                    <text
-                      x={pin.x + 8}
-                      y={pin.y + 3.5}
-                      fontSize="11"
-                      fontWeight="600"
-                      fill="#ffffff"
-                      className="drop-shadow-[0_1px_3px_rgba(0,37,26,0.95)]"
-                    >
-                      {pin.label}
-                    </text>
-                  </g>
-                ))}
+                {/* Animated Touring Route (re-keyed so it replays for every region) */}
+                <MapRoute key={activeRegion.id} stops={activeRegion.route} play={mapInView} />
               </svg>
             </div>
 

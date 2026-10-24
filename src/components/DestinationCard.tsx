@@ -3,11 +3,14 @@
 import React from 'react';
 import Link from 'next/link';
 import { Destination } from '@/data/destinations';
+import { motion } from 'motion/react';
 import { MapPin, Moon, Sun, ArrowRight } from 'lucide-react';
 
 interface DestinationCardProps {
   destination: Destination;
   onClick?: () => void;
+  // Shared-element id: the photo morphs into whatever else on the page renders this id
+  photoLayoutId?: string;
 }
 
 // Clean concise season format for badges
@@ -20,7 +23,7 @@ function formatSeason(season: string): string {
   return season.split('(')[0].trim();
 }
 
-export default function DestinationCard({ destination, onClick }: DestinationCardProps) {
+export default function DestinationCard({ destination, onClick, photoLayoutId }: DestinationCardProps) {
   const seasonLabel = formatSeason(destination.bestTime);
   const topHighlights = destination.highlights?.slice(0, 2) || [];
 
@@ -43,14 +46,33 @@ export default function DestinationCard({ destination, onClick }: DestinationCar
     // @ts-expect-error dynamic wrapper polymorphism
     <CardWrapper
       {...wrapperProps}
+      // A static copy of the photo behind the shared one, so the card never looks empty
+      // while its photo is away in (or flying back from) the detail modal
+      style={{
+        backgroundImage: `url(${destination.heroImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
       className="group no-underline flex flex-col relative h-[460px] rounded-3xl overflow-hidden border border-[rgba(16,60,46,0.15)] hover:border-[rgba(178,240,209,0.45)] shadow-[0_8px_25px_-6px_rgba(0,37,26,0.1)] hover:shadow-[0_24px_50px_-10px_rgba(0,37,26,0.28),0_0_0_1px_rgba(178,240,209,0.3)] hover:-translate-y-1.5 transition-all duration-400 ease-out bg-[#00251a] cursor-pointer text-left"
     >
-      {/* 1. CINEMATIC HERO IMAGE WITH SMOOTH SCALE */}
-      <img
-        src={destination.heroImage}
-        alt={destination.name}
-        className="absolute inset-0 w-full h-full object-cover group-hover:scale-108 transition-transform duration-800 ease-out"
-      />
+      {/* 1. CINEMATIC HERO IMAGE WITH SMOOTH SCALE
+          (with photoLayoutId, this photo morphs into the matching detail modal's header) */}
+      <motion.div
+        layoutId={photoLayoutId}
+        className="absolute inset-0 overflow-hidden"
+        style={{
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+          borderBottomLeftRadius: 24,
+          borderBottomRightRadius: 24,
+        }}
+      >
+        <img
+          src={destination.heroImage}
+          alt={destination.name}
+          className="absolute inset-0 w-full h-full object-cover group-hover:scale-108 transition-transform duration-800 ease-out"
+        />
+      </motion.div>
 
       {/* 2. MULTI-LAYER AMBIENT GRADIENTS FOR LEGIBILITY & LUXURY */}
       <div className="absolute inset-0 bg-gradient-to-b from-[rgba(0,37,26,0.65)] via-[rgba(0,37,26,0.15)] to-transparent pointer-events-none" />
@@ -75,7 +97,7 @@ export default function DestinationCard({ destination, onClick }: DestinationCar
       <div className="mt-auto relative z-[2] p-7 flex flex-col gap-2.5 text-white">
         {/* Season & Best Time Indicator */}
         <div className="inline-flex items-center gap-1.5 text-secondary-fixed text-[0.74rem] font-semibold tracking-wider uppercase">
-          <Sun className="w-3.5 h-3.5 leading-none text-amber-500 shrink-0" />
+          <Sun className="w-3.5 h-3.5 leading-none text-secondary-fixed shrink-0" />
           <span>Optimal Season: {seasonLabel}</span>
         </div>
 

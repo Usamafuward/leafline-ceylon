@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState, use } from 'react';
+import SplitText from '@/components/ui/SplitText';
+import React, { useState, use, useRef, ViewTransition } from 'react';
+import { motion, useScroll, useSpring, useMotionValueEvent } from 'motion/react';
 import Link from 'next/link';
 import { TOURS_DATA, TourPackage } from '@/data/tours';
 import {
@@ -19,12 +21,15 @@ import {
   X,
   Send,
 } from 'lucide-react';
+import { useCurrency } from '@/context/CurrencyContext';
+import JourneyMap from '@/components/JourneyMap';
 
 export default function PackageDetailPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  const { formatPrice } = useCurrency();
   const resolvedParams = use(params);
   const tour = TOURS_DATA.find((t) => t.slug === resolvedParams.slug) || TOURS_DATA[0];
 
@@ -37,6 +42,23 @@ export default function PackageDetailPage({
     phone: '',
     date: '',
     notes: '',
+  });
+
+  // Itinerary timeline: the line grows as the list passes 70% down the viewport,
+  // and each day's dot lights up once the line's tip has reached it
+  const itineraryRef = useRef<HTMLDivElement>(null);
+  const dayDotRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const [reachedDays, setReachedDays] = useState(0);
+  const { scrollYProgress: itineraryProgress } = useScroll({
+    target: itineraryRef,
+    offset: ['start 70%', 'end 70%'],
+  });
+  const timelineScale = useSpring(itineraryProgress, { stiffness: 120, damping: 28, restDelta: 0.001 });
+
+  useMotionValueEvent(itineraryProgress, 'change', () => {
+    const tipY = window.innerHeight * 0.7;
+    const reached = dayDotRefs.current.filter((dot) => dot && dot.getBoundingClientRect().top < tipY).length;
+    setReachedDays((prev) => (prev === reached ? prev : reached));
   });
 
   const toggleDay = (day: number) => {
@@ -54,13 +76,19 @@ export default function PackageDetailPage({
     <div className="flex flex-col w-full bg-surface">
       {/* SECTION 1: HEADER & BREADCRUMBS */}
       <section className="w-full bg-[#00251a] text-white pt-28 sm:pt-32 pb-10 relative overflow-hidden">
-        <img
-          src={tour.heroImage}
-          alt={tour.title}
-          className="absolute inset-0 w-full h-full object-cover object-[center_35%] opacity-25 saturate-[0.85] pointer-events-none"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#00251a]/85 via-[#103c2e]/65 to-[#00251a]/95 pointer-events-none" />
+        {/* Shared element: the package card photo morphs into this header backdrop */}
+        <ViewTransition name={`tour-photo-${tour.slug}`} share="tour-morph" default="none">
+          <div className="absolute inset-0 pointer-events-none">
+            <img
+              src={tour.heroImage}
+              alt={tour.title}
+              className="absolute inset-0 w-full h-full object-cover object-[center_35%] opacity-25 saturate-[0.85]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#00251a]/85 via-[#103c2e]/65 to-[#00251a]/95" />
+          </div>
+        </ViewTransition>
 
+        <ViewTransition enter="tour-header-enter" default="none">
         <div className="max-container relative z-10">
           <nav className="flex items-center gap-2 text-[0.75rem] uppercase tracking-[0.14em] text-secondary-fixed mb-6">
             <Link href="/" className="text-[#d8e5dd] hover:text-white transition-colors no-underline">
@@ -109,7 +137,7 @@ export default function PackageDetailPage({
                 </span>
                 <div className="flex items-baseline gap-1.5 mt-0.5">
                   <span className="font-serif text-4xl font-bold text-primary">
-                    ${tour.pricePerPerson.toLocaleString()}
+                    {formatPrice(tour.pricePerPerson)}
                   </span>
                   <span className="text-[0.85rem] text-on-surface-variant">/ person</span>
                 </div>
@@ -179,6 +207,7 @@ export default function PackageDetailPage({
             </div>
           </div>
         </div>
+        </ViewTransition>
       </section>
 
       {/* SECTION 2: ASYMMETRIC HERO GALLERY MOSAIC */}
@@ -201,6 +230,13 @@ export default function PackageDetailPage({
         </div>
       </section>
 
+      {/* SECTION 2B: ANIMATED JOURNEY MAP */}
+      <section className="w-full pb-16">
+        <div className="max-container">
+          <JourneyMap tour={tour} />
+        </div>
+      </section>
+
       {/* SECTION 3: DAY-BY-DAY ITINERARY ACCORDION & BOOKING DOSSIER */}
       <section className="w-full pb-24">
         <div className="max-container">
@@ -213,7 +249,7 @@ export default function PackageDetailPage({
                     EXPEDITION DOSSIER
                   </span>
                   <h2 className="font-serif text-3xl text-primary font-normal mt-1">
-                    Day-by-Day Itinerary
+                    <SplitText text="Day-by-Day Itinerary" />
                   </h2>
                 </div>
 
@@ -226,13 +262,39 @@ export default function PackageDetailPage({
                 </button>
               </div>
 
-              {/* Accordion List */}
-              <div className="flex flex-col gap-4">
-                {tour.itinerary.map((day) => {
+              {/* Accordion List with Scroll-Drawn Timeline */}
+              <div ref={itineraryRef} className="relative flex flex-col gap-4 pl-8 sm:pl-10">
+                <div
+                  aria-hidden="true"
+                  className="absolute left-[7px] sm:left-[11px] top-9 bottom-9 w-[2px] rounded-full bg-surface-container-high overflow-hidden"
+                >
+                  <motion.div
+                    style={{ scaleY: timelineScale }}
+                    className="w-full h-full origin-top bg-gradient-to-b from-secondary to-[#2e6951]"
+                  />
+                </div>
+
+                {tour.itinerary.map((day, idx) => {
                   const isOpen = activeDay === day.day;
+                  const isReached = idx < reachedDays;
                   return (
+                    <div key={day.day} className="relative">
+                    {/* Timeline Dot */}
+                    <span
+                      ref={(el) => {
+                        dayDotRefs.current[idx] = el;
+                      }}
+                      aria-hidden="true"
+                      className={`absolute -left-8 sm:-left-10 top-[30px] sm:top-[26px] w-4 h-4 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${
+                        isReached
+                          ? 'bg-secondary border-secondary scale-100 shadow-[0_0_0_5px_rgba(178,240,209,0.45)]'
+                          : 'bg-white border-outline-variant scale-90'
+                      }`}
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full bg-white transition-opacity duration-500 ${isReached ? 'opacity-100' : 'opacity-0'}`} />
+                    </span>
+
                     <div
-                      key={day.day}
                       className={`bg-white rounded-2xl border transition-all duration-300 overflow-hidden ${isOpen
                           ? 'border-secondary shadow-[0_8px_24px_-4px_rgba(16,60,46,0.1)]'
                           : 'border-surface-container-high'
@@ -298,6 +360,7 @@ export default function PackageDetailPage({
                         </div>
                       )}
                     </div>
+                    </div>
                   );
                 })}
               </div>
@@ -360,7 +423,7 @@ export default function PackageDetailPage({
                     Thank you, {bookingForm.name || 'valued traveler'}. Our travel specialists will review your dates and send a personalized itinerary and quote within 24 hours.
                   </p>
                   <a
-                    href={`https://wa.me/94771234567?text=Hello%20Lanka%20Memo%2C%20I%20just%20submitted%20a%20booking%20inquiry%20for%20${encodeURIComponent(tour.title)}%20for%20${guestsCount}%20guests.`}
+                    href={`https://wa.me/94771234567?text=Hello%20Leafline%20Ceylon%2C%20I%20just%20submitted%20a%20booking%20inquiry%20for%20${encodeURIComponent(tour.title)}%20for%20${guestsCount}%20guests.`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full py-3.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold text-[0.9rem] flex items-center justify-center gap-2 shadow-[0_6px_18px_rgba(37,211,102,0.3)] transition-all duration-200"
@@ -447,7 +510,7 @@ export default function PackageDetailPage({
                         Estimated All-Inclusive Total
                       </span>
                       <p className="text-2xl font-bold text-primary m-0 font-serif">
-                        ${totalPrice.toLocaleString()}
+                        {formatPrice(totalPrice)}
                       </p>
                     </div>
                     <span className="text-[0.75rem] text-secondary font-semibold">

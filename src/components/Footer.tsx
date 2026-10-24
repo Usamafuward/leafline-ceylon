@@ -1,5 +1,6 @@
 'use client';
 
+import BrandLogo from '@/components/BrandLogo';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { CheckCircle2, Send, ArrowRight, MapPin, Phone, Mail, Clock } from 'lucide-react';
@@ -55,7 +56,7 @@ export default function Footer() {
               {subscribed ? (
                 <div className="flex items-center gap-2 px-6 py-3.5 bg-white/95 text-[#00251a] rounded-full font-semibold text-[0.9rem] shadow-xl backdrop-blur-md">
                   <CheckCircle2 className="w-5 h-5 text-[#0c5037] shrink-0" />
-                  <span>Thank you for subscribing to Lanka Memo Holidays!</span>
+                  <span>Thank you for subscribing to Leafline Ceylon!</span>
                 </div>
               ) : (
                 <>
@@ -87,28 +88,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 pb-14 border-b border-white/10">
           {/* Column 1: Brand & SLTDA credentials */}
           <div className="flex flex-col gap-5">
-            <div className="flex items-center gap-3">
-              <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
-                <rect width="48" height="48" rx="12" fill="#103c2e" />
-                <path
-                  d="M24 6C24 6 36 15 34 29C32 39 22 43 22 43C22 43 20 33 24 23C26 16 24 6 24 6Z"
-                  fill="#2e6951"
-                />
-                <path
-                  d="M24 6C24 6 12 17 14 31C15 41 22 43 22 43C22 43 18 31 21 21C23 15 24 6 24 6Z"
-                  fill="#b2f0d1"
-                  opacity="0.9"
-                />
-              </svg>
-              <div>
-                <span className="font-serif text-[1.2rem] font-semibold text-white block leading-tight">
-                  Lanka Memo
-                </span>
-                <span className="text-[0.62rem] tracking-widest text-secondary-fixed uppercase font-semibold">
-                  Holidays Sri Lanka
-                </span>
-              </div>
-            </div>
+            <BrandLogo size={34} />
 
             <p className="text-[#c0c8c3] text-[0.88rem] leading-relaxed">
               Sri Lanka&apos;s trusted private tour operator. Handcrafting memorable, comfortable journeys with dedicated English-speaking chauffeur guides and handpicked quality hotels.
@@ -320,7 +300,7 @@ export default function Footer() {
               </p>
               <p className="flex items-center gap-2 m-0">
                 <Mail className="w-4 h-4 text-secondary-fixed shrink-0" />
-                <span>info@lankamemo.com</span>
+                <span>info@leaflineceylon.com</span>
               </p>
               <p className="flex items-center gap-2 m-0">
                 <Clock className="w-4 h-4 text-secondary-fixed shrink-0" />
@@ -340,7 +320,7 @@ export default function Footer() {
 
         {/* Bottom Credits & Accreditations */}
         <div className="pt-12 flex flex-wrap items-center justify-between gap-6 text-[0.8rem] text-outline">
-          <p className="m-0">© {new Date().getFullYear()} Lanka Memo Holidays (Pvt) Ltd. All rights reserved.</p>
+          <p className="m-0">© {new Date().getFullYear()} Leafline Ceylon (Pvt) Ltd. All rights reserved.</p>
 
           <div className="flex items-center gap-6">
             <span className="text-[#c0c8c3]">SLTDA Licensed Inbound Tour Operator • Comprehensive Passenger Protection</span>

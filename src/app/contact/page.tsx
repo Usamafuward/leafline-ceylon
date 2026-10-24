@@ -1,7 +1,9 @@
 'use client';
 
+import SplitText from '@/components/ui/SplitText';
 import React, { useState } from 'react';
 import Link from 'next/link';
+import PageHero from '@/components/PageHero';
 import {
   Building2,
   Headset,
@@ -43,7 +45,7 @@ export default function ContactPage() {
     },
     {
       q: 'Can itineraries be customized once we have arrived on the island?',
-      a: 'Yes, completely. Because every voyage with Lanka Memo is 100% private with your own dedicated vehicle and chauffeur-guide, you enjoy total flexibility. You may pause for spontaneous photo stops, adjust departure times, or linger longer at sights without group rush.',
+      a: 'Yes, completely. Because every voyage with Leafline Ceylon is 100% private with your own dedicated vehicle and chauffeur-guide, you enjoy total flexibility. You may pause for spontaneous photo stops, adjust departure times, or linger longer at sights without group rush.',
     },
     {
       q: 'How does luggage handling work during scenic train journeys?',
@@ -58,34 +60,16 @@ export default function ContactPage() {
 
   return (
     <div className="flex flex-col w-full bg-surface text-on-surface">
-      {/* 1. HERO BANNER */}
-      <section className="w-full bg-[#103c2e] text-white pt-28 sm:pt-32 pb-16 sm:pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(178,240,209,0.12)_0%,transparent_60%)] pointer-events-none" />
-
-        <div className="max-container relative z-10">
-          {/* Breadcrumb Navigation */}
-          <nav className="flex items-center gap-2 text-xs uppercase tracking-widest text-secondary-fixed mb-5">
-            <Link href="/" className="text-white/80 hover:text-white no-underline transition-colors">
-              Home
-            </Link>
-            <span className="opacity-40">/</span>
-            <span className="text-white font-semibold">Contact &amp; Inquiries</span>
-          </nav>
-
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase text-secondary-fixed font-semibold mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-secondary-fixed" />
-            GET IN TOUCH • 24/7 SUPPORT
-          </span>
-
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal leading-[1.15] max-w-3xl mb-4">
-            Contact Our Sri Lanka Tour Specialists
-          </h1>
-
-          <p className="text-white/85 text-sm sm:text-base max-w-2xl leading-relaxed">
-            Whether you need a full custom tour package, private airport transfer, or hotel recommendations, our friendly local team in Colombo is here to assist you.
-          </p>
-        </div>
-      </section>
+      {/* 1. PHOTO HERO (shared across inner pages) */}
+      <PageHero
+        crumb="Contact & Inquiries"
+        eyebrow="Get in Touch • 24/7 Support"
+        title="Contact Our Sri Lanka Tour Specialists"
+        description="Whether you need a full custom tour package, private airport transfer, or hotel recommendations, our friendly local team in Colombo is here to assist you."
+        image="/images/colombo_city_skyline.jpg"
+        imageAlt="Colombo city skyline"
+        imagePosition="center 50%"
+      />
 
       {/* 2. CONTACT CHANNELS (4 CARDS) */}
       <section className="w-full py-14 sm:py-16 bg-surface">
@@ -164,13 +148,13 @@ export default function ContactPage() {
                 Email Inquiries
               </h3>
               <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed mb-4">
-                info@lankamemo.com<br />
-                bookings@lankamemo.com
+                info@leaflineceylon.com<br />
+                bookings@leaflineceylon.com
               </p>
               <div className="mt-auto pt-3 border-t border-[#cbdcd1]/60 flex justify-between items-center text-xs">
                 <span className="text-outline">&lt; 4h Response</span>
                 <a
-                  href="mailto:info@lankamemo.com"
+                  href="mailto:info@leaflineceylon.com"
                   className="font-bold text-secondary hover:text-primary no-underline transition-colors"
                 >
                   Send Email &rarr;
@@ -191,7 +175,7 @@ export default function ContactPage() {
                 GET A FREE QUOTE
               </span>
               <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-primary font-normal leading-tight mb-3">
-                Request a Custom Tour Itinerary
+                <SplitText text="Request a Custom Tour Itinerary" />
               </h2>
               <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed mb-8">
                 Share your travel dates and preferences. One of our Ceylon travel specialists will review and prepare a personalized day-by-day proposal within 24 hours.
@@ -387,7 +371,7 @@ export default function ContactPage() {
                   FREQUENTLY ASKED QUESTIONS
                 </span>
                 <h2 className="font-serif text-2xl sm:text-3xl text-primary mb-6 leading-tight font-normal">
-                  Sri Lanka Travel FAQs
+                  <SplitText text="Sri Lanka Travel FAQs" />
                 </h2>
 
                 <div className="flex flex-col gap-3">

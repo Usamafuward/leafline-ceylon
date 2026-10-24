@@ -1,41 +1,26 @@
 'use client';
 
+import SplitText from '@/components/ui/SplitText';
 import React from 'react';
 import Link from 'next/link';
 import { MapPin } from 'lucide-react';
 import DynamicIcon from '@/components/ui/Icon';
+import CountUp from '@/components/ui/CountUp';
+import PageHero from '@/components/PageHero';
 
 export default function AboutUsPage() {
   return (
     <div className="flex flex-col w-full text-on-surface">
-      {/* 1. HERO BANNER */}
-      <section className="w-full bg-[#103c2e] text-white pt-28 sm:pt-32 pb-16 sm:pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(178,240,209,0.12)_0%,transparent_60%)] pointer-events-none" />
-
-        <div className="max-container relative z-10">
-          {/* Breadcrumb Navigation */}
-          <nav className="flex items-center gap-2 text-xs uppercase tracking-widest text-secondary-fixed mb-5">
-            <Link href="/" className="text-white/80 hover:text-white no-underline transition-colors">
-              Home
-            </Link>
-            <span className="opacity-40">/</span>
-            <span className="text-white font-semibold">About Us</span>
-          </nav>
-
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase text-secondary-fixed font-semibold mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-secondary-fixed" />
-            OUR STORY &amp; VALUES
-          </span>
-
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal leading-[1.15] max-w-3xl mb-4">
-            Passionate Local Experts in Sri Lanka
-          </h1>
-
-          <p className="text-white/85 text-sm sm:text-base max-w-2xl leading-relaxed">
-            Founded on the belief that a holiday should be relaxing, comfortable, and tailored to you. We organize 100% private, flexible tours across Sri Lanka with dedicated English-speaking chauffeur guides and handpicked quality hotels.
-          </p>
-        </div>
-      </section>
+      {/* 1. PHOTO HERO (shared across inner pages) */}
+      <PageHero
+        crumb="About Us"
+        eyebrow="Our Story & Values"
+        title="Passionate Local Experts in Sri Lanka"
+        description="Founded on the belief that a holiday should be relaxing, comfortable, and tailored to you. We organize 100% private, flexible tours across Sri Lanka with dedicated English-speaking chauffeur guides and handpicked quality hotels."
+        image="/images/kandy_dalada_maligawa_sunset.jpg"
+        imageAlt="Temple of the Tooth in Kandy at sunset"
+        imagePosition="center 50%"
+      />
 
       {/* 2. THE STORY / GENESIS */}
       <section className="w-full py-20 sm:py-24 bg-surface">
@@ -47,10 +32,10 @@ export default function AboutUsPage() {
                 OUR STORY
               </span>
               <h2 className="font-serif text-3xl sm:text-4xl text-primary font-normal leading-tight mb-5">
-                Over 10 Years of Excellence in Sri Lanka Travel
+                <SplitText text="Over 10 Years of Excellence in Sri Lanka Travel" />
               </h2>
               <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed mb-4">
-                Lanka Memo Holidays was founded in Colombo by a team of passionate local travel professionals who recognized that crowded group bus tours prevent travelers from truly enjoying Sri Lanka.
+                Leafline Ceylon was founded in Colombo by a team of passionate local travel professionals who recognized that crowded group bus tours prevent travelers from truly enjoying Sri Lanka.
               </p>
               <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed mb-8">
                 We replace crowded tour buses with clean, modern air-conditioned private vehicles, generic package hotels with charming boutique resorts and authentic tea bungalows, and rushed itineraries with relaxed, customizable days.
@@ -115,15 +100,18 @@ export default function AboutUsPage() {
         <div className="max-container">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {[
-              { stat: '10+', label: 'Years Experience', desc: 'Crafting memorable private tours across Sri Lanka' },
-              { stat: '100%', label: 'Private Tours', desc: 'Never shared with strangers; your own vehicle and driver' },
-              { stat: '100%', label: 'Transparent Pricing', desc: 'No hidden fees or unexpected commission shopping stops' },
-              { stat: '4.98 / 5', label: 'Guest Satisfaction', desc: 'Over 380+ 5-star traveler reviews worldwide' },
+              { value: 10, suffix: '+', label: 'Years Experience', desc: 'Crafting memorable private tours across Sri Lanka' },
+              { value: 100, suffix: '%', label: 'Private Tours', desc: 'Never shared with strangers; your own vehicle and driver' },
+              { value: 100, suffix: '%', label: 'Transparent Pricing', desc: 'No hidden fees or unexpected commission shopping stops' },
+              { value: 4.98, decimals: 2, suffix: ' / 5', label: 'Guest Satisfaction', desc: 'Over 380+ 5-star traveler reviews worldwide' },
             ].map((item, idx) => (
               <div key={idx} className="px-2">
-                <span className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-secondary-fixed block leading-tight mb-1.5">
-                  {item.stat}
-                </span>
+                <CountUp
+                  value={item.value}
+                  decimals={item.decimals}
+                  suffix={item.suffix}
+                  className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-secondary-fixed block leading-tight mb-1.5"
+                />
                 <span className="text-sm font-bold text-white block mb-1">
                   {item.label}
                 </span>
@@ -144,7 +132,7 @@ export default function AboutUsPage() {
               OUR PROMISES
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-primary font-normal leading-tight mb-3">
-              Why Travel With Us
+              <SplitText text="Why Travel With Us" />
             </h2>
             <p className="text-on-surface-variant text-sm sm:text-base leading-relaxed">
               The four commitments that ensure your Sri Lanka vacation is smooth, comfortable, and memorable.
@@ -220,7 +208,7 @@ export default function AboutUsPage() {
               OUR TEAM
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-primary font-normal leading-tight mb-3">
-              The People Behind Your Tour
+              <SplitText text="The People Behind Your Tour" />
             </h2>
             <p className="text-on-surface-variant text-sm sm:text-base leading-relaxed">
               A great tour depends on local knowledge, reliability, and warm hospitality. Meet our team leaders.
@@ -292,10 +280,10 @@ export default function AboutUsPage() {
               ACCREDITATION &amp; SAFETY
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-primary font-normal leading-tight mb-3">
-              Licensed &amp; Certified Tour Operator
+              <SplitText text="Licensed & Certified Tour Operator" />
             </h2>
             <p className="text-on-surface-variant text-sm sm:text-base leading-relaxed">
-              Lanka Memo Holidays is a fully licensed inbound tour operator registered with the Sri Lanka Tourism Development Authority (Registration No: <strong className="text-primary font-semibold">SLTDA/SQA/TA/01482</strong>).
+              Leafline Ceylon is a fully licensed inbound tour operator registered with the Sri Lanka Tourism Development Authority (Registration No: <strong className="text-primary font-semibold">SLTDA/SQA/TA/01482</strong>).
             </p>
           </div>
 

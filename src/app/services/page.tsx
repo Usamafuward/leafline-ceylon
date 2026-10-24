@@ -1,42 +1,26 @@
 'use client';
 
+import SplitText from '@/components/ui/SplitText';
 import React from 'react';
 import Link from 'next/link';
 import { SERVICES_DATA } from '@/data/services';
 import ServiceCard from '@/components/ServiceCard';
 import { CheckCircle2, Speech, ShieldCheck, Sparkles } from 'lucide-react';
+import PageHero from '@/components/PageHero';
 
 export default function ServicesPage() {
   return (
     <div className="flex flex-col w-full bg-surface text-on-surface">
-      {/* 1. HERO BANNER */}
-      <section className="w-full bg-[#103c2e] text-white pt-28 sm:pt-32 pb-16 sm:pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(178,240,209,0.12)_0%,transparent_60%)] pointer-events-none" />
-
-        <div className="max-container relative z-10">
-          {/* Breadcrumb Navigation */}
-          <nav className="flex items-center gap-2 text-xs uppercase tracking-widest text-secondary-fixed mb-5">
-            <Link href="/" className="text-white/80 hover:text-white no-underline transition-colors">
-              Home
-            </Link>
-            <span className="opacity-40">/</span>
-            <span className="text-white font-semibold">Services</span>
-          </nav>
-
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase text-secondary-fixed font-semibold mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-secondary-fixed" />
-            PREMIUM TRAVEL SERVICES &amp; PRIVATE VEHICLES
-          </span>
-
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal leading-[1.15] max-w-4xl mb-4">
-            Private Chauffeurs &amp; Travel Services
-          </h1>
-
-          <p className="text-white/85 text-sm sm:text-base max-w-3xl leading-relaxed">
-            Every journey with Lanka Memo Holidays is organized with care and reliability. From personal meet and greet at Colombo Airport to scenic train tickets and private 4x4 safari jeeps.
-          </p>
-        </div>
-      </section>
+      {/* 1. PHOTO HERO (shared across inner pages) */}
+      <PageHero
+        crumb="Services"
+        eyebrow="Premium Travel Services & Private Vehicles"
+        title="Private Chauffeurs & Travel Services"
+        description="Every journey with Leafline Ceylon is organized with care and reliability. From personal meet and greet at Colombo Airport to scenic train tickets and private 4x4 safari jeeps."
+        image="/images/toyota_prado_luxury_suv.jpg"
+        imageAlt="Private chauffeur-driven SUV"
+        imagePosition="center 55%"
+      />
 
       {/* 2. CONCIERGE SERVICES GRID */}
       <section className="w-full py-16 sm:py-20 bg-surface">
@@ -46,7 +30,7 @@ export default function ServicesPage() {
               CURATED CONCIERGE
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-primary font-normal leading-tight">
-              Private Tour Transport &amp; Excursions
+              <SplitText text="Private Tour Transport & Excursions" />
             </h2>
           </div>
 
@@ -70,7 +54,7 @@ export default function ServicesPage() {
                 THE CHAUFFEUR-GUIDE ETHOS
               </span>
               <h2 className="font-serif text-3xl sm:text-4xl text-primary font-normal leading-tight mb-4">
-                More than a Driver. Your Personal Host in Ceylon.
+                <SplitText text="More than a Driver. Your Personal Host in Ceylon." />
               </h2>
               <p className="text-on-surface-variant text-sm sm:text-base leading-relaxed mb-8">
                 In Sri Lanka, the chemistry between you and your chauffeur-guide defines your journey. Our chauffeurs are cultured ambassadors of the island with a minimum of 8 years of luxury hospitality experience.
@@ -130,7 +114,7 @@ export default function ServicesPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-[#103c2e]/75 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-6 left-6 right-6 text-white">
                 <span className="text-[10px] tracking-widest uppercase text-secondary-fixed font-bold block mb-1">
-                  LANKA MEMO STANDARD
+                  LEAFLINE STANDARD
                 </span>
                 <p className="text-sm sm:text-base font-medium m-0">
                   8+ Years Average Experience per Chauffeur Guide

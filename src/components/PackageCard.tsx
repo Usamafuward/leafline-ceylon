@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { ViewTransition } from 'react';
 import Link from 'next/link';
 import { TourPackage } from '@/data/tours';
 import { Clock, Star, Sun, Navigation, CheckCircle2, Car, Hotel, ArrowRight } from 'lucide-react';
+import { useCurrency } from '@/context/CurrencyContext';
 
 interface PackageCardProps {
   tour: TourPackage;
@@ -73,6 +74,7 @@ const TOUR_CURATED_HIGHLIGHTS: Record<string, string[]> = {
 };
 
 export default function PackageCard({ tour }: PackageCardProps) {
+  const { formatPrice } = useCurrency();
   const routeText =
     TOUR_ROUTES[tour.slug] ||
     Array.from(
@@ -93,14 +95,19 @@ export default function PackageCard({ tour }: PackageCardProps) {
     <div className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-[rgba(16,60,46,0.1)] hover:border-[rgba(46,105,81,0.4)] shadow-[0_6px_20px_-4px_rgba(0,37,26,0.06)] hover:shadow-[0_20px_40px_-10px_rgba(0,37,26,0.15),0_0_0_1px_rgba(178,240,209,0.35)] hover:-translate-y-1.5 transition-all duration-350 ease-out relative h-full">
       {/* 1. CINEMATIC IMAGE HEADER */}
       <div className="relative h-[240px] overflow-hidden bg-[#00251a]">
-        <img
-          src={tour.heroImage}
-          alt={tour.title}
-          className="w-full h-full object-cover group-hover:scale-106 transition-transform duration-700 ease-out"
-        />
+        {/* Shared element: morphs into the package detail header on navigation */}
+        <ViewTransition name={`tour-photo-${tour.slug}`} share="tour-morph" default="none">
+          <div className="absolute inset-0 overflow-hidden">
+            <img
+              src={tour.heroImage}
+              alt={tour.title}
+              className="w-full h-full object-cover group-hover:scale-106 transition-transform duration-700 ease-out"
+            />
 
-        {/* Ambient Gradient Overlays for contrast */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(0,37,26,0.85)] via-[rgba(0,37,26,0.15)] to-black/40 pointer-events-none" />
+            {/* Ambient Gradient Overlays for contrast */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[rgba(0,37,26,0.85)] via-[rgba(0,37,26,0.15)] to-black/40 pointer-events-none" />
+          </div>
+        </ViewTransition>
 
         {/* TOP FLOATING BADGES (Duration & Rating) */}
         <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2 z-[2]">
@@ -112,7 +119,7 @@ export default function PackageCard({ tour }: PackageCardProps) {
 
           {/* Rating Pill */}
           <div className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md shadow-[0_2px_8px_rgba(0,0,0,0.15)] text-primary text-[0.75rem] font-bold">
-            <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500 leading-none shrink-0" />
+            <Star className="w-3.5 h-3.5 text-secondary fill-secondary leading-none shrink-0" />
             <span>{tour.rating.toFixed(2)}</span>
             <span className="text-[#5e7068] font-medium text-[0.7rem]">
               ({tour.reviewsCount})
@@ -195,7 +202,7 @@ export default function PackageCard({ tour }: PackageCardProps) {
             </span>
             <div className="flex items-baseline gap-0.5">
               <span className="font-serif text-[1.45rem] font-bold text-primary leading-none">
-                ${tour.pricePerPerson.toLocaleString()}
+                {formatPrice(tour.pricePerPerson)}
               </span>
               <span className="text-[0.72rem] text-outline font-medium ml-0.5">
                 / traveler

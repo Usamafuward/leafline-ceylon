@@ -1,8 +1,10 @@
 'use client';
 
+import SplitText from '@/components/ui/SplitText';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import DynamicIcon from '@/components/ui/Icon';
+import PageHero from '@/components/PageHero';
 import {
   ChevronDown,
   ArrowRight,
@@ -77,33 +79,16 @@ export default function PlanTripPage() {
 
   return (
     <div className="flex flex-col w-full bg-surface text-on-surface">
-      {/* 1. HERO BANNER */}
-      <section className="w-full bg-[#103c2e] text-white pt-28 sm:pt-32 pb-16 sm:pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(178,240,209,0.12)_0%,transparent_60%)] pointer-events-none" />
-
-        <div className="max-container relative z-10">
-          {/* Breadcrumb Navigation */}
-          <nav className="flex items-center gap-2 text-xs uppercase tracking-widest text-secondary-fixed mb-5">
-            <Link href="/" className="text-white/80 hover:text-white no-underline transition-colors">
-              Home
-            </Link>
-            <span className="opacity-40">/</span>
-            <span className="text-white font-semibold">Plan Your Trip</span>
-          </nav>
-
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase text-secondary-fixed font-semibold mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-secondary-fixed" />
-            CUSTOM TRIP PLANNER • SRI LANKA
-          </span>
-
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal leading-[1.15] max-w-3xl mb-4">
-            Plan Your Custom Sri Lanka Holiday
-          </h1>
-          <p className="text-white/85 text-sm sm:text-base max-w-2xl leading-relaxed">
-            Tell us how you like to travel, choose your favorite destinations and experiences, and get a personalized day-by-day itinerary with transparent pricing within 24 hours.
-          </p>
-        </div>
-      </section>
+      {/* 1. PHOTO HERO (shared across inner pages) */}
+      <PageHero
+        crumb="Plan Your Trip"
+        eyebrow="Custom Trip Planner • Sri Lanka"
+        title="Plan Your Custom Sri Lanka Holiday"
+        description="Tell us how you like to travel, choose your favorite destinations and experiences, and get a personalized day-by-day itinerary with transparent pricing within 24 hours."
+        image="/images/ella_nine_arches_bridge_drone.jpg"
+        imageAlt="Aerial view of the Nine Arch Bridge in Ella"
+        imagePosition="center 50%"
+      />
 
       {/* 2. 5-STEP NAVIGATOR PILL BAR */}
       <section className="w-full bg-[#edf4ef]/95 backdrop-blur-md py-3.5 z-30 border-b border-[#cbdcd1]/80 shadow-xs">
@@ -164,7 +149,7 @@ export default function PlanTripPage() {
                       STEP 01 / TRAVELERS &amp; DURATION
                     </span>
                     <h2 className="font-serif text-2xl sm:text-3xl text-primary font-normal">
-                      Who is traveling?
+                      <SplitText text="Who is traveling?" />
                     </h2>
                     <p className="text-xs sm:text-sm text-on-surface-variant mt-1.5 leading-relaxed">
                       Select who is traveling so we can suggest the ideal private vehicle, room setup, and itinerary pace.
@@ -308,7 +293,7 @@ export default function PlanTripPage() {
                       STEP 02 / DESTINATIONS
                     </span>
                     <h2 className="font-serif text-2xl sm:text-3xl text-primary font-normal">
-                      Where would you like to visit?
+                      <SplitText text="Where would you like to visit?" />
                     </h2>
                     <p className="text-xs sm:text-sm text-on-surface-variant mt-1.5 leading-relaxed">
                       Select the regions and cities you want to include in your private tour.
@@ -381,7 +366,7 @@ export default function PlanTripPage() {
                       STEP 03 / EXPERIENCES &amp; ACTIVITIES
                     </span>
                     <h2 className="font-serif text-2xl sm:text-3xl text-primary font-normal">
-                      What activities would you love to do?
+                      <SplitText text="What activities would you love to do?" />
                     </h2>
                     <p className="text-xs sm:text-sm text-on-surface-variant mt-1.5 leading-relaxed">
                       Choose your favorite activities. We handle all permits, train reservations, and private safari jeeps.
@@ -456,7 +441,7 @@ export default function PlanTripPage() {
                       STEP 04 / ACCOMMODATION STYLE
                     </span>
                     <h2 className="font-serif text-2xl sm:text-3xl text-primary font-normal">
-                      What style of hotels do you prefer?
+                      <SplitText text="What style of hotels do you prefer?" />
                     </h2>
                     <p className="text-xs sm:text-sm text-on-surface-variant mt-1.5 leading-relaxed">
                       Sri Lanka offers wonderful accommodation options for all budgets, from charming boutique stays to world-class luxury tea bungalows.
@@ -548,7 +533,7 @@ export default function PlanTripPage() {
                       STEP 05 / GET YOUR FREE CUSTOM QUOTE
                     </span>
                     <h2 className="font-serif text-2xl sm:text-3xl text-primary font-normal">
-                      Where should we send your custom itinerary?
+                      <SplitText text="Where should we send your custom itinerary?" />
                     </h2>
                     <p className="text-xs sm:text-sm text-on-surface-variant mt-1.5 leading-relaxed">
                       Our Sri Lanka travel specialists will create a day-by-day plan with transparent pricing and send it within 24 hours.
@@ -567,7 +552,7 @@ export default function PlanTripPage() {
 
                       <div className="flex flex-wrap gap-4 justify-center">
                         <a
-                          href={`https://wa.me/94771234567?text=Hello%20Lanka%20Memo%20Holidays%2C%20I%20just%20submitted%20a%20tour%20request%20for%20a%20${durationDays}-day%20private%20trip%20for%20${encodeURIComponent(partyType)}.`}
+                          href={`https://wa.me/94771234567?text=Hello%20Leafline%20Ceylon%2C%20I%20just%20submitted%20a%20tour%20request%20for%20a%20${durationDays}-day%20private%20trip%20for%20${encodeURIComponent(partyType)}.`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="px-8 py-3.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold text-xs tracking-wide flex items-center gap-2 shadow-md transition-all duration-200 no-underline"

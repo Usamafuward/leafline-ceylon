@@ -3,6 +3,9 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
+// Clip-path image wipes run longer (0.75s + up to 320ms stagger); removing the class early would cut them short
+const IMAGE_REVEAL_MS = 1100;
+
 export default function ScrollAnimationProvider() {
   const pathname = usePathname();
 
@@ -24,6 +27,13 @@ export default function ScrollAnimationProvider() {
       return;
     }
 
+    const completeReveal = (el: Element, delay: number) => {
+      setTimeout(() => {
+        el.classList.add('reveal-complete');
+        el.classList.remove('reveal-card', 'reveal-up', 'reveal-text', 'reveal-image', 'scroll-reveal');
+      }, delay);
+    };
+
     const observerCallback: IntersectionObserverCallback = (entries, observer) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -32,18 +42,17 @@ export default function ScrollAnimationProvider() {
           observer.unobserve(el);
 
           // Once entrance animation finishes, remove reveal classes so native card & button hovers work 100% cleanly
-          setTimeout(() => {
-            el.classList.add('reveal-complete');
-            el.classList.remove('reveal-card', 'reveal-up', 'reveal-text', 'reveal-image', 'scroll-reveal');
-          }, 850);
+          completeReveal(el, el.classList.contains('reveal-image') ? IMAGE_REVEAL_MS : 850);
         }
       });
     };
 
+    // Threshold 0: clipped image reveals report a visible ratio of 0 until revealed,
+    // so any higher threshold is never crossed and the element would stay hidden
     const observer = new IntersectionObserver(observerCallback, {
       root: null,
       rootMargin: '0px 0px -40px 0px',
-      threshold: 0.08,
+      threshold: 0,
     });
 
     const observeElements = () => {
@@ -59,10 +68,7 @@ export default function ScrollAnimationProvider() {
         const rect = el.getBoundingClientRect();
         if (rect.top < window.innerHeight * 0.95 && rect.bottom > 0) {
           el.classList.add('is-revealed');
-          setTimeout(() => {
-            el.classList.add('reveal-complete');
-            el.classList.remove('reveal-card', 'reveal-up', 'reveal-text', 'reveal-image', 'scroll-reveal');
-          }, 350);
+          completeReveal(el, el.classList.contains('reveal-image') ? IMAGE_REVEAL_MS : 350);
         } else {
           observer.observe(el);
         }

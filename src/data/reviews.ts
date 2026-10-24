@@ -23,7 +23,7 @@ export const REVIEWS_DATA: Review[] = [
     rating: 5,
     avatar: "/images/avatar_1.jpg",
     headline: "Unforgettable 12-day tour with the best private driver!",
-    reviewText: "From the moment we arrived at Colombo airport to our last sunset in Galle Fort, everything was perfectly organized. Our private chauffeur-guide, Ruwan, was friendly, knowledgeable, and always on time. The scenic train ride to Ella and the tea estate in Hatton were highlights of our trip. Highly recommend Lanka Memo Holidays!",
+    reviewText: "From the moment we arrived at Colombo airport to our last sunset in Galle Fort, everything was perfectly organized. Our private chauffeur-guide, Ruwan, was friendly, knowledgeable, and always on time. The scenic train ride to Ella and the tea estate in Hatton were highlights of our trip. Highly recommend Leafline Ceylon!",
     verified: true
   },
   {
@@ -49,7 +49,7 @@ export const REVIEWS_DATA: Review[] = [
     rating: 5,
     avatar: "/images/avatar_3.jpg",
     headline: "The perfect honeymoon trip - completely stress-free",
-    reviewText: "The sunrise hot air balloon over Sigiriya followed by a beach stay in Mirissa was pure magic. Lanka Memo handled all our hotels, tickets, and private transfers smoothly. We never had to worry about a thing. Thank you for making our honeymoon so special!",
+    reviewText: "The sunrise hot air balloon over Sigiriya followed by a beach stay in Mirissa was pure magic. Leafline handled all our hotels, tickets, and private transfers smoothly. We never had to worry about a thing. Thank you for making our honeymoon so special!",
     verified: true
   },
   {

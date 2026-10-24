@@ -1,7 +1,13 @@
 'use client';
 
+import SplitText from '@/components/ui/SplitText';
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'motion/react';
+import PageHero from '@/components/PageHero';
+import useScrollLock from '@/components/ui/useScrollLock';
+import Image from 'next/image';
+import { gridItemMotion } from '@/components/ui/gridMotion';
 import {
   ChevronDown,
   ZoomIn,
@@ -563,12 +569,58 @@ const CATEGORIES = [
   { id: 'adventure', label: 'Adventure' },
 ];
 
+// Gallery photos go through Next's image optimiser: several originals are 4-7 MB camera files
+// (up to 5897px wide), far too heavy to redraw at every frame of the open / close morph.
+// The lightbox base layer reuses GALLERY_THUMB_SIZES so it shares the thumbnail's file.
+const GALLERY_THUMB_SIZES = '(max-width: 640px) 100vw, 50vw';
+const GALLERY_LIGHTBOX_SIZES = '(max-width: 1100px) 100vw, 1020px';
+
+// Thumbnail corner radius, set as motion style so it animates smoothly during the lightbox morph
+const THUMB_RADIUS = {
+  borderTopLeftRadius: 16,
+  borderTopRightRadius: 16,
+  borderBottomLeftRadius: 16,
+  borderBottomRightRadius: 16,
+};
+
+// A static copy of the photo painted behind each card, so the card never looks like an
+// empty placeholder while its photo is away in (or flying back from) the lightbox
+const cardBackdrop = (image: string) => ({
+  backgroundImage: `url(${image})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+});
+
 // All images combined for universal filtering and modal navigation
 const ALL_GALLERY_ITEMS: GalleryItem[] = [...BENTO_COLLECTION, ...CLASSIC_ARCHIVES];
 
 export default function GalleryPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [activeModalItem, setActiveModalItem] = useState<GalleryItem | null>(null);
+  // The photo the lightbox was opened from: only it morphs (prev / next inside the lightbox crossfade)
+  const [openedItemId, setOpenedItemId] = useState<string | null>(null);
+  // Width / height of the photo on show, so the lightbox frame matches it exactly (no letterboxing to morph into)
+  const [lightboxAspect, setLightboxAspect] = useState(3 / 2);
+
+  useScrollLock(activeModalItem !== null);
+
+  // Opens instantly: the lightbox's base layer reuses the thumbnail's already-decoded image,
+  // so there is nothing to wait for before the morph starts
+  const openLightbox = (item: GalleryItem, card: HTMLElement) => {
+    const img = card.querySelector('img');
+    if (img?.naturalWidth) setLightboxAspect(img.naturalWidth / img.naturalHeight);
+    setOpenedItemId(item.id);
+    setActiveModalItem(item);
+  };
+
+  const closeLightbox = () => setActiveModalItem(null);
+
+  // Read a photo's proportions from its (already loaded) thumbnail on the page
+  const showInLightbox = (item: GalleryItem) => {
+    const img = document.querySelector<HTMLImageElement>(`img[data-gallery-thumb="${item.id}"]`);
+    if (img?.naturalWidth) setLightboxAspect(img.naturalWidth / img.naturalHeight);
+    setActiveModalItem(item);
+  };
 
   const filteredItems = selectedCategory === 'all'
     ? ALL_GALLERY_ITEMS
@@ -578,14 +630,14 @@ export default function GalleryPage() {
     if (!activeModalItem) return;
     const currentIndex = filteredItems.findIndex((it) => it.id === activeModalItem.id);
     const nextIndex = (currentIndex + 1) % filteredItems.length;
-    setActiveModalItem(filteredItems[nextIndex]);
+    showInLightbox(filteredItems[nextIndex]);
   }, [activeModalItem, filteredItems]);
 
   const handlePrevModal = useCallback(() => {
     if (!activeModalItem) return;
     const currentIndex = filteredItems.findIndex((it) => it.id === activeModalItem.id);
     const prevIndex = (currentIndex - 1 + filteredItems.length) % filteredItems.length;
-    setActiveModalItem(filteredItems[prevIndex]);
+    showInLightbox(filteredItems[prevIndex]);
   }, [activeModalItem, filteredItems]);
 
   useEffect(() => {
@@ -601,34 +653,16 @@ export default function GalleryPage() {
 
   return (
     <div className="flex flex-col w-full bg-surface text-on-surface">
-      {/* 1. HERO BANNER */}
-      <section className="w-full bg-[#103c2e] text-white pt-28 sm:pt-32 pb-16 sm:pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(178,240,209,0.12)_0%,transparent_60%)] pointer-events-none" />
-
-        <div className="max-container relative z-10">
-          {/* Breadcrumb Navigation */}
-          <nav className="flex items-center gap-2 text-xs uppercase tracking-widest text-secondary-fixed mb-5">
-            <Link href="/" className="text-white/80 hover:text-white no-underline transition-colors">
-              Home
-            </Link>
-            <span className="opacity-40">/</span>
-            <span className="text-white font-semibold">Visual Archives</span>
-          </nav>
-
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs tracking-widest uppercase text-secondary-fixed font-semibold mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-secondary-fixed" />
-            THE VISUAL CHRONICLE
-          </span>
-
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal leading-[1.15] max-w-4xl mb-4">
-            A Photographic Ode to Ceylon
-          </h1>
-
-          <p className="text-white/85 text-sm sm:text-base max-w-3xl leading-relaxed">
-            Curated imagery captured during private voyages across the island. Every granite precipice, sapphire wave, and tea mist valley tells the story of an island untouched by mass haste.
-          </p>
-        </div>
-      </section>
+      {/* 1. PHOTO HERO (shared across inner pages) */}
+      <PageHero
+        crumb="Visual Archives"
+        eyebrow="The Visual Chronicle"
+        title="A Photographic Ode to Ceylon"
+        description="Curated imagery captured during private voyages across the island. Every granite precipice, sapphire wave, and tea mist valley tells the story of an island untouched by mass haste."
+        image="/images/sri_lanka_traditional_stilt_fishermen_gold.jpg"
+        imageAlt="Traditional stilt fishermen on the southern coast at golden hour"
+        imagePosition="center 50%"
+      />
 
       {/* 2. FILTER TABS & DROPDOWN */}
       <section className="w-full bg-[#edf4ef]/95 backdrop-blur-md py-3.5 z-30 border-b border-[#cbdcd1]/80 shadow-xs">
@@ -694,7 +728,7 @@ export default function GalleryPage() {
                       Curated Order
                     </span>
                     <h2 className="font-serif text-2xl md:text-3xl text-primary font-normal m-0">
-                      Editorial Bento Collection
+                      <SplitText text="Editorial Bento Collection" />
                     </h2>
                   </div>
                   <span className="text-xs font-medium text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-full">
@@ -707,15 +741,21 @@ export default function GalleryPage() {
                   {BENTO_COLLECTION.map((item, idx) => (
                     <div
                       key={item.id}
-                      onClick={() => setActiveModalItem(item)}
+                      onClick={(e) => openLightbox(item, e.currentTarget)}
+                      style={cardBackdrop(item.image)}
                       className={`reveal-image stagger-${(idx % 4) + 1} group relative rounded-2xl overflow-hidden cursor-pointer border border-surface-container-high shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 bg-surface-container-lowest ${item.colSpanClass} ${item.rowSpanClass} ${item.heightClass}`}
                     >
-                      {/* Image with Zoom */}
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-106"
-                      />
+                      {/* Image with Zoom (shared element: morphs into the lightbox when opened) */}
+                      <motion.div layoutId={`gallery-photo-${item.id}`} className="relative w-full h-full overflow-hidden" style={THUMB_RADIUS}>
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          sizes={GALLERY_THUMB_SIZES}
+                          data-gallery-thumb={item.id}
+                          className="object-cover transition-transform duration-700 ease-out group-hover:scale-106"
+                        />
+                      </motion.div>
 
                       {/* Crisp Gradient Overlay for Text Legibility */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/5 pointer-events-none transition-opacity duration-300 group-hover:opacity-90" />
@@ -749,7 +789,7 @@ export default function GalleryPage() {
                       Extended Archives
                     </span>
                     <h2 className="font-serif text-2xl md:text-3xl text-primary font-normal m-0">
-                      Curator’s Classic Archives &amp; Field Chronicles
+                      <SplitText text="Curator’s Classic Archives & Field Chronicles" />
                     </h2>
                   </div>
                   <span className="text-xs font-medium text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-full">
@@ -762,15 +802,21 @@ export default function GalleryPage() {
                   {CLASSIC_ARCHIVES.map((item, idx) => (
                     <div
                       key={item.id}
-                      onClick={() => setActiveModalItem(item)}
+                      onClick={(e) => openLightbox(item, e.currentTarget)}
+                      style={cardBackdrop(item.image)}
                       className={`reveal-image stagger-${(idx % 4) + 1} group relative rounded-2xl overflow-hidden cursor-pointer border border-surface-container-high shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 bg-surface-container-lowest ${item.colSpanClass} ${item.rowSpanClass} ${item.heightClass}`}
                     >
-                      {/* Image with Zoom */}
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-106"
-                      />
+                      {/* Image with Zoom (shared element: morphs into the lightbox when opened) */}
+                      <motion.div layoutId={`gallery-photo-${item.id}`} className="relative w-full h-full overflow-hidden" style={THUMB_RADIUS}>
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          sizes={GALLERY_THUMB_SIZES}
+                          data-gallery-thumb={item.id}
+                          className="object-cover transition-transform duration-700 ease-out group-hover:scale-106"
+                        />
+                      </motion.div>
 
                       {/* Crisp Gradient Overlay for Text Legibility */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/5 pointer-events-none transition-opacity duration-300 group-hover:opacity-90" />
@@ -809,17 +855,25 @@ export default function GalleryPage() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
+                <AnimatePresence mode="popLayout">
                 {filteredItems.map((item, idx) => (
-                  <div
+                  <motion.div
                     key={item.id}
-                    onClick={() => setActiveModalItem(item)}
-                    className={`reveal-image stagger-${(idx % 3) + 1} group cursor-pointer relative h-[330px] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-surface-container-high bg-surface-container-lowest`}
+                    {...gridItemMotion(idx)}
+                    onClick={(e) => openLightbox(item, e.currentTarget)}
+                      style={cardBackdrop(item.image)}
+                    className="group cursor-pointer relative h-[330px] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1 transition-[box-shadow,translate] duration-300 border border-surface-container-high bg-surface-container-lowest"
                   >
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-106 transition-transform duration-600 ease-out"
-                    />
+                    <motion.div layoutId={`gallery-photo-${item.id}`} className="relative w-full h-full overflow-hidden" style={THUMB_RADIUS}>
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        sizes={GALLERY_THUMB_SIZES}
+                        data-gallery-thumb={item.id}
+                        className="object-cover group-hover:scale-106 transition-transform duration-600 ease-out"
+                      />
+                    </motion.div>
                     <div className="absolute inset-0 bg-gradient-to-t from-[rgba(0,37,26,0.88)] via-[rgba(0,37,26,0.3)] to-transparent pointer-events-none" />
 
                     <div className="absolute top-4 left-4 z-10">
@@ -839,98 +893,178 @@ export default function GalleryPage() {
                         {item.caption}
                       </p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
+                </AnimatePresence>
               </div>
             </div>
           )}
         </div>
       </section>
 
-      {/* 5. Lightbox Fullscreen Modal */}
-      {activeModalItem && (
-        <div
-          onClick={() => setActiveModalItem(null)}
-          className="fixed inset-0 z-50 bg-[#103c2e]/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
-        >
+      {/* 5. Lightbox Fullscreen Modal: the clicked photo morphs out of its thumbnail into the viewer;
+          prev / next crossfade inside it; the page behind stays locked while it is open */}
+      <AnimatePresence>
+        {activeModalItem && (
           <div
-            onClick={(e) => e.stopPropagation()}
-            className="max-w-[1020px] w-full bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh] border border-[#cbdcd1]/80"
+            key="gallery-lightbox"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="gallery-lightbox-title"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
           >
-            {/* Viewport with Prev / Next Navigation */}
-            <div className="relative flex-1 min-h-[320px] max-h-[580px] bg-black flex items-center justify-center overflow-hidden">
-              <img
-                src={activeModalItem.image}
-                alt={activeModalItem.title}
-                className="w-full h-full object-contain"
-              />
+            {/* Backdrop */}
+            <motion.div
+              className="absolute inset-0 bg-[#103c2e]/95"
+              onClick={closeLightbox}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.3 } }}
+              transition={{ duration: 0.35 }}
+            />
 
-              {/* Close Button */}
-              <button
-                onClick={() => setActiveModalItem(null)}
-                aria-label="Close modal"
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 text-white border-0 cursor-pointer flex items-center justify-center transition-colors z-20"
-              >
-                <X className="w-5 h-5" />
-              </button>
+            <div className="relative max-w-[1020px] w-full flex flex-col max-h-[92vh] shadow-2xl rounded-3xl">
+              {/* Viewport: black stage fades in behind the photo as it lands */}
+              <div className="relative h-[min(580px,58vh)] min-h-[300px] flex items-center justify-center shrink-0">
+                <motion.div
+                  className="absolute inset-0 bg-black rounded-t-3xl"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, transition: { duration: 0.3, delay: 0.25 } }}
+                  exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                />
 
-              {/* Prev / Next Arrow Controls */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePrevModal();
-                }}
-                aria-label="Previous photograph"
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white border-0 cursor-pointer flex items-center justify-center transition-all z-20"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
+                {/* propagate: when the whole lightbox closes, tell the photo it is leaving too, so it
+                    hands back to its thumbnail immediately instead of after the backdrop has faded */}
+                <AnimatePresence initial={false} mode="popLayout" propagate>
+                  <motion.div
+                    key={activeModalItem.id}
+                    layoutId={activeModalItem.id === openedItemId ? `gallery-photo-${activeModalItem.id}` : undefined}
+                    className="relative overflow-hidden"
+                    style={{
+                      aspectRatio: lightboxAspect,
+                      width: `min(100%, calc(min(580px, 58vh) * ${lightboxAspect}))`,
+                      borderTopLeftRadius: 16,
+                      borderTopRightRadius: 16,
+                      borderBottomLeftRadius: 16,
+                      borderBottomRightRadius: 16,
+                    }}
+                    initial={activeModalItem.id === openedItemId ? false : { opacity: 0, scale: 0.97 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, transition: { duration: 0.25 } }}
+                    transition={{
+                      layout: { type: 'spring', bounce: 0, visualDuration: 0.55 },
+                      opacity: { duration: 0.35 },
+                      scale: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
+                    }}
+                  >
+                    {/* Base layer: the exact image the thumbnail already shows (same sizes = same file, already
+                        decoded), so the morph paints on its first frame with no waiting */}
+                    <Image
+                      src={activeModalItem.image}
+                      alt={activeModalItem.title}
+                      fill
+                      loading="eager"
+                      sizes={GALLERY_THUMB_SIZES}
+                      className="object-cover"
+                    />
+                    {/* Sharp layer: lightbox-sized copy fades in over it once loaded */}
+                    <Image
+                      src={activeModalItem.image}
+                      alt=""
+                      aria-hidden
+                      fill
+                      loading="eager"
+                      sizes={GALLERY_LIGHTBOX_SIZES}
+                      className="object-cover opacity-0 transition-opacity duration-300"
+                      onLoad={(e) => {
+                        e.currentTarget.style.opacity = '1';
+                      }}
+                    />
+                  </motion.div>
+                </AnimatePresence>
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleNextModal();
-                }}
-                aria-label="Next photograph"
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white border-0 cursor-pointer flex items-center justify-center transition-all z-20"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </div>
-
-            {/* Bottom Caption & Action Area */}
-            <div className="p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-white">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <span className="text-xs uppercase text-secondary font-semibold tracking-wider">
-                    {activeModalItem.pill}
-                  </span>
-                  <span className="text-xs text-on-surface-variant/50">•</span>
-                  <span className="text-xs uppercase text-on-surface-variant font-medium">
-                    {activeModalItem.location}
-                  </span>
-                </div>
-                <h3 className="font-serif text-2xl md:text-3xl text-primary mt-1 mb-2 font-normal">
-                  {activeModalItem.title}
-                </h3>
-                <p className="text-[0.9rem] text-on-surface-variant max-w-[650px] m-0 leading-relaxed font-light">
-                  {activeModalItem.caption}
-                </p>
-              </div>
-
-              <div className="shrink-0 w-full md:w-auto">
-                <Link
-                  href="/plan-trip"
-                  className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary-fixed text-white hover:text-primary px-6 py-3 rounded-full text-[0.85rem] font-semibold tracking-wide transition-all duration-300 shadow-md cursor-pointer no-underline"
+                {/* Controls fade in once the photo has landed */}
+                <motion.div
+                  className="absolute inset-0 pointer-events-none"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, transition: { duration: 0.3, delay: 0.4 } }}
+                  exit={{ opacity: 0, transition: { duration: 0.1 } }}
                 >
-                  <MapPinPlus className="w-4 h-4 shrink-0" />
-                  <span>Include in My Trip</span>
-                </Link>
+                  {/* Close Button */}
+                  <button
+                    autoFocus
+                    onClick={closeLightbox}
+                    aria-label="Close modal"
+                    className="pointer-events-auto absolute top-4 right-4 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 text-white border-0 cursor-pointer flex items-center justify-center transition-colors z-20"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+
+                  {/* Prev / Next Arrow Controls */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePrevModal();
+                    }}
+                    aria-label="Previous photograph"
+                    className="pointer-events-auto absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white border-0 cursor-pointer flex items-center justify-center transition-all z-20"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleNextModal();
+                    }}
+                    aria-label="Next photograph"
+                    className="pointer-events-auto absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white border-0 cursor-pointer flex items-center justify-center transition-all z-20"
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
+                </motion.div>
               </div>
+
+              {/* Bottom Caption & Action Area (slides up under the landing photo) */}
+              <motion.div
+                data-lenis-prevent
+                className="p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-white rounded-b-3xl overflow-y-auto"
+                initial={{ opacity: 0, y: 28 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.32, ease: [0.16, 1, 0.3, 1] } }}
+                exit={{ opacity: 0, transition: { duration: 0.1 } }}
+              >
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-xs uppercase text-secondary font-semibold tracking-wider">
+                      {activeModalItem.pill}
+                    </span>
+                    <span className="text-xs text-on-surface-variant/50">•</span>
+                    <span className="text-xs uppercase text-on-surface-variant font-medium">
+                      {activeModalItem.location}
+                    </span>
+                  </div>
+                  <h3 id="gallery-lightbox-title" className="font-serif text-2xl md:text-3xl text-primary mt-1 mb-2 font-normal">
+                    {activeModalItem.title}
+                  </h3>
+                  <p className="text-[0.9rem] text-on-surface-variant max-w-[650px] m-0 leading-relaxed font-light">
+                    {activeModalItem.caption}
+                  </p>
+                </div>
+
+                <div className="shrink-0 w-full md:w-auto">
+                  <Link
+                    href="/plan-trip"
+                    className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary-fixed text-white hover:text-primary px-6 py-3 rounded-full text-[0.85rem] font-semibold tracking-wide transition-all duration-300 shadow-md cursor-pointer no-underline"
+                  >
+                    <MapPinPlus className="w-4 h-4 shrink-0" />
+                    <span>Include in My Trip</span>
+                  </Link>
+                </div>
+              </motion.div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 }

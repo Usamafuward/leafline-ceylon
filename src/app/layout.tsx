@@ -7,6 +7,8 @@ import ScrollToTop from "@/components/ScrollToTop";
 import ScrollAnimationProvider from "@/components/ScrollAnimationProvider";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
+import { CurrencyProvider } from "@/context/CurrencyContext";
+import MotionProvider from "@/components/MotionProvider";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -15,18 +17,18 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Lanka Memo Holidays | Luxury Tour Operator in Sri Lanka | Bespoke Private Journeys",
+  title: "Leafline Ceylon | Luxury Tour Operator in Sri Lanka | Bespoke Private Journeys",
   description: "Experience handcrafted private luxury itineraries in Sri Lanka. Explore ancient UNESCO citadels, colonial tea estates, wild leopards in Yala, and secluded tropical coasts accompanied by certified senior naturalists.",
   keywords: "Sri Lanka tour operator, luxury travel Sri Lanka, private tour Sri Lanka, bespoke Ceylon itineraries, Sigiriya private tour, Yala safari private guide, Sri Lanka honeymoon",
-  authors: [{ name: "Lanka Memo Holidays Ceylon" }],
+  authors: [{ name: "Leafline Ceylon" }],
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "Lanka Memo Holidays | Curated Sri Lankan Journeys",
+    title: "Leafline Ceylon | Curated Sri Lankan Journeys",
     description: "Journeys beyond the ordinary. Private chauffeured circuits, Relais & Châteaux stays, and certified wildlife naturalists across Sri Lanka.",
-    url: "https://lankamemoholidays.com",
-    siteName: "Lanka Memo Holidays Ceylon",
+    url: "https://leaflineceylon.com",
+    siteName: "Leafline Ceylon",
     locale: "en_US",
     type: "website",
   },
@@ -48,16 +50,20 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning>
-        <SmoothScrollProvider />
-        <SmoothCursor />
-        <ScrollToTop />
-        <ScrollAnimationProvider />
-        <Header />
-        <main className="flex-1 min-h-screen">
-          {children}
-        </main>
-        <Footer />
-        <WhatsAppFloat />
+        <CurrencyProvider>
+          <MotionProvider>
+            <SmoothScrollProvider />
+            <SmoothCursor />
+            <ScrollToTop />
+            <ScrollAnimationProvider />
+            <Header />
+            <main className="flex-1 min-h-screen">
+              {children}
+            </main>
+            <Footer />
+            <WhatsAppFloat />
+          </MotionProvider>
+        </CurrencyProvider>
       </body>
     </html>
   );
