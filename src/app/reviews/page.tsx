@@ -73,7 +73,7 @@ export default function ReviewsPage() {
       {/* 2. AGGREGATE SCORE BAR & THEME FILTER */}
       <section className="w-full bg-[#edf4ef]/95 backdrop-blur-md py-4 sm:py-5 z-30 border-b border-[#cbdcd1]/80 shadow-xs">
         <div className="max-container">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             {/* Left: Star rating summary */}
             <div className="flex items-center gap-4">
               <CountUp
@@ -96,7 +96,7 @@ export default function ReviewsPage() {
             {/* Right: Actions & Filter Controls */}
             <div className="flex flex-wrap items-center gap-3">
               {/* Desktop Filter Pills */}
-              <div className="hidden sm:flex items-center gap-1.5">
+              <div className="hidden sm:flex flex-wrap items-center gap-1.5">
                 {FILTER_OPTIONS.map((opt) => (
                   <button
                     key={opt.id}
@@ -226,7 +226,7 @@ export default function ReviewsPage() {
           />
           <motion.div
             data-lenis-prevent
-            className="relative max-w-[580px] w-full bg-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-[#cbdcd1]/80 max-h-[92vh] overflow-y-auto"
+            className="popup-scroll relative max-w-[580px] w-full bg-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-[#cbdcd1]/80 max-h-[92vh] overflow-y-auto"
             initial={{ opacity: 0, y: 40, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.98, transition: { duration: 0.2, ease: 'easeIn' } }}

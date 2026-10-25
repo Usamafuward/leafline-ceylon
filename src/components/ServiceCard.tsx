@@ -25,7 +25,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#103c2e]/80 via-black/20 to-black/30 pointer-events-none" />
 
         {/* Top Badges Bar */}
-        <div className="absolute top-3.5 left-3.5 right-3.5 flex justify-between items-center gap-2 z-10">
+        <div className="absolute top-3.5 left-3.5 right-3.5 flex flex-wrap justify-between items-center gap-x-2 gap-y-1.5 z-10">
           {/* Category Pill */}
           <span className="px-3 py-1 rounded-full bg-[#103c2e]/85 backdrop-blur-md border border-[rgba(178,240,209,0.3)] text-secondary-fixed text-[0.68rem] font-bold tracking-widest uppercase whitespace-nowrap inline-flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-secondary-fixed" />

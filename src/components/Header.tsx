@@ -105,7 +105,7 @@ export default function Header() {
             once scrolling (or while the mobile menu is open). Only colour, shadow and height change,
             never the shape or horizontal position. */}
         <div
-          className={`relative pointer-events-auto w-full flex items-center justify-between gap-6 px-4 sm:px-8 lg:px-26 2xl:px-26 border-b transition-[height,background-color,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`relative pointer-events-auto w-full border-b transition-[height,background-color,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             solid
               ? 'h-16 sm:h-[72px] bg-[#103c2e]/95 backdrop-blur-xl border-[rgba(178,240,209,0.14)] shadow-[0_10px_30px_-12px_rgba(0,25,18,0.55)]'
               : 'h-20 sm:h-24 bg-transparent border-transparent shadow-none'
@@ -118,26 +118,29 @@ export default function Header() {
               solid ? 'opacity-0' : 'opacity-100'
             }`}
           />
-          {/* Brand Logo */}
-          <Link
-            href="/"
-            onClick={() => {
-              window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-            }}
-            className="flex items-center gap-3 no-underline group shrink-0"
-          >
-            <BrandLogo />
-          </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden min-[1080px]:flex items-center gap-5 2xl:gap-8">
-            {navLinks.map((item) => {
-              const isActive =
-                item.href === '/'
-                  ? pathname === '/'
-                  : pathname.startsWith(item.href);
+          {/* Header Content Container: EXACT SAME max-container as the page below */}
+          <div className="max-container w-full h-full flex items-center justify-between gap-4 sm:gap-6">
+            {/* Brand Logo */}
+            <Link
+              href="/"
+              onClick={() => {
+                window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+              }}
+              className="flex items-center gap-3 no-underline group shrink-0"
+            >
+              <BrandLogo />
+            </Link>
 
-              return (
+            {/* Desktop Navigation Links */}
+            <nav className="hidden min-[1080px]:flex items-center gap-3.5 xl:gap-5 2xl:gap-7">
+              {navLinks.map((item) => {
+                const isActive =
+                  item.href === '/'
+                    ? pathname === '/'
+                    : pathname.startsWith(item.href);
+
+                return (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -161,8 +164,8 @@ export default function Header() {
 
           {/* Action CTAs & Currency Switcher */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Currency & Language Switcher Dropdown */}
-            <div className="relative" ref={switcherRef}>
+            {/* Currency & Language Switcher Dropdown (phones use the drawer's selector instead) */}
+            <div className="relative hidden sm:block" ref={switcherRef}>
               <button
                 type="button"
                 onClick={() => setSwitcherOpen(!switcherOpen)}
@@ -277,6 +280,7 @@ export default function Header() {
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
+          </div>
 
           {/* Reading Progress along the bar's bottom edge (only once the bar is solid) */}
           <div
@@ -296,7 +300,8 @@ export default function Header() {
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
         <div
-          className="menu-drop-in fixed top-[76px] sm:top-[84px] inset-x-3 sm:inset-x-6 z-40 bg-[#00251a]/95 backdrop-blur-2xl border border-white/15 rounded-3xl p-6 sm:p-8 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] flex flex-col min-[1080px]:hidden max-w-xl mx-auto"
+          data-lenis-prevent
+          className="menu-drop-in popup-scroll popup-scroll-dark fixed top-[76px] sm:top-[84px] inset-x-4 sm:inset-x-8 z-40 bg-[#00251a]/95 backdrop-blur-2xl border border-white/15 rounded-3xl p-6 sm:p-8 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] flex flex-col min-[1080px]:hidden max-w-xl mx-auto"
           style={{ maxHeight: 'calc(100vh - 6.5rem)', overflowY: 'auto' }}
         >
           <div className="flex flex-col gap-4 mb-6">

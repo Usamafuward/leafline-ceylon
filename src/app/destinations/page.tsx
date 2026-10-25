@@ -204,7 +204,7 @@ export default function DestinationsPage() {
               {/* Modal Body Content (scrolls on its own; slides up once the photo has landed, so no empty panel shows early) */}
               <motion.div
                 data-lenis-prevent
-                className="bg-white rounded-b-2xl border border-t-0 border-[#e3eae5] flex-1 min-h-0 overflow-y-auto"
+                className="popup-scroll bg-white rounded-b-2xl border border-t-0 border-[#e3eae5] flex-1 min-h-0 overflow-y-auto"
                 initial={{ opacity: 0, y: 32 }}
                 animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.4, ease: [0.16, 1, 0.3, 1] } }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}

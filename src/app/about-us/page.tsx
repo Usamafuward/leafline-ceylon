@@ -312,11 +312,11 @@ export default function AboutUsPage() {
                 key={i}
                 className="bg-[#edf4ef] p-6 sm:p-7 rounded-2xl border border-[#cbdcd1]/60 hover:border-secondary transition-all flex flex-col"
               >
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center md:flex-col md:items-start lg:flex-row lg:items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-xl bg-white text-secondary flex items-center justify-center shrink-0 shadow-xs">
                     <DynamicIcon name={cred.icon} size={22} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="text-base font-semibold text-primary m-0 leading-snug">{cred.title}</h3>
                     <span className="text-[11px] text-secondary tracking-wide uppercase font-semibold">
                       {cred.cert}

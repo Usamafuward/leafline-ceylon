@@ -1028,7 +1028,7 @@ export default function GalleryPage() {
               {/* Bottom Caption & Action Area (slides up under the landing photo) */}
               <motion.div
                 data-lenis-prevent
-                className="p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-white rounded-b-3xl overflow-y-auto"
+                className="popup-scroll p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-white rounded-b-3xl overflow-y-auto"
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.32, ease: [0.16, 1, 0.3, 1] } }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}

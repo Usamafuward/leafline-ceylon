@@ -128,7 +128,7 @@ export default function PackageCard({ tour }: PackageCardProps) {
         </div>
 
         {/* BOTTOM IMAGE STRIP (Style Pill & Season) */}
-        <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between z-[2] gap-2">
+        <div className="absolute bottom-3.5 left-4 right-4 flex flex-wrap items-center justify-between z-[2] gap-x-2 gap-y-1.5">
           {/* Style Pill */}
           <span className="inline-block px-2.5 py-1 rounded-md bg-[rgba(0,37,26,0.85)] backdrop-blur-md border border-[rgba(178,240,209,0.25)] text-white text-[0.68rem] font-semibold tracking-wide whitespace-nowrap">
             {styleLabel}
@@ -143,7 +143,7 @@ export default function PackageCard({ tour }: PackageCardProps) {
       </div>
 
       {/* 2. CARD BODY */}
-      <div className="p-[1.4rem_1.5rem_1.5rem_1.5rem] flex flex-col flex-1">
+      <div className="p-5 sm:p-[1.4rem_1.5rem_1.5rem_1.5rem] flex flex-col flex-1">
         {/* Route Ribbon (Single Line with fixed height) */}
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[rgba(16,60,46,0.04)] border border-[rgba(16,60,46,0.07)] mb-3.5 h-[34px] box-border">
           <Navigation className="w-3.5 h-3.5 text-secondary shrink-0" />
@@ -194,7 +194,7 @@ export default function PackageCard({ tour }: PackageCardProps) {
         </div>
 
         {/* 3. CARD FOOTER (Price & CTA Button) */}
-        <div className="mt-auto pt-4.5 border-t border-surface-container-high flex items-center justify-between gap-3">
+        <div className="mt-auto pt-4.5 border-t border-surface-container-high flex flex-wrap items-center justify-between gap-3">
           {/* Price Block */}
           <div>
             <span className="text-[0.65rem] text-outline uppercase tracking-wider font-semibold block mb-0.5">

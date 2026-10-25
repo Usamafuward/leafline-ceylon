@@ -535,7 +535,7 @@ export default function SignatureExperiencesSlider() {
                         }
                         goTo(exp.slideIndex);
                       }}
-                      className={`relative w-[160px] sm:w-[190px] md:w-[calc((100%-2rem)/3)] min-w-[160px] sm:min-w-[190px] md:min-w-[calc((100%-2rem)/3)] md:max-w-[calc((100%-2rem)/3)] lg:w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-1rem)/2)] lg:max-w-[calc((100%-1rem)/2)] xl:w-[calc((100%-2rem)/3)] xl:min-w-[calc((100%-2rem)/3)] xl:max-w-[calc((100%-2rem)/3)] h-[280px] sm:h-[310px] md:h-[330px] lg:h-full rounded-2xl overflow-hidden shrink-0 cursor-pointer group border border-white/15 hover:border-secondary-fixed/70 shadow-[0_18px_40px_-18px_rgba(0,0,0,0.8)] transition-[opacity,border-color] duration-500 ${
+                      className={`relative w-[160px] sm:w-[190px] md:w-[calc((100%-2rem)/3)] min-w-[160px] sm:min-w-[190px] md:min-w-[calc((100%-2rem)/3)] md:max-w-[calc((100%-2rem)/3)] lg:w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-1rem)/2)] lg:max-w-[calc((100%-1rem)/2)] xl:w-[calc((100%-2rem)/3)] xl:min-w-[calc((100%-2rem)/3)] xl:max-w-[calc((100%-2rem)/3)] h-[280px] sm:h-[310px] md:h-[330px] lg:h-full rounded-2xl overflow-hidden shrink-0 cursor-pointer group border border-white/15 hover:border-secondary-fixed/70 transition-[opacity,border-color] duration-500 ${
                         isActiveSlide ? 'opacity-0 pointer-events-none' : 'opacity-100'
                       }`}
                     >

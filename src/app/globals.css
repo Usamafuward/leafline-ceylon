@@ -365,6 +365,44 @@
     }
   }
 
+  /* Popup scroll areas (modals, mobile drawer): the scrollbar floats inside the panel as a slim
+     pill on a transparent track, inset from the edge and kept clear of the rounded corners,
+     instead of the page's full-height mint track pressed against the panel border.
+     Add .popup-scroll-dark on dark panels for a light thumb. */
+  .popup-scroll {
+    --popup-thumb: rgba(46, 105, 81, 0.45);
+    --popup-thumb-hover: rgba(46, 105, 81, 0.75);
+    overscroll-behavior: contain;
+  }
+  .popup-scroll-dark {
+    --popup-thumb: rgba(178, 240, 209, 0.3);
+    --popup-thumb-hover: rgba(178, 240, 209, 0.55);
+  }
+  .popup-scroll::-webkit-scrollbar {
+    width: 14px;
+  }
+  .popup-scroll::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 20px;
+  }
+  .popup-scroll::-webkit-scrollbar-thumb {
+    background: var(--popup-thumb);
+    background-clip: padding-box;
+    border: 4px solid transparent;
+    border-radius: 9999px;
+  }
+  .popup-scroll::-webkit-scrollbar-thumb:hover,
+  .popup-scroll::-webkit-scrollbar-thumb:active {
+    background: var(--popup-thumb-hover);
+    background-clip: padding-box;
+  }
+  @supports (-moz-appearance: none) {
+    .popup-scroll {
+      scrollbar-color: var(--popup-thumb) transparent;
+      scrollbar-width: thin;
+    }
+  }
+
   @media (max-width: 768px) {
     .hide-mobile {
       display: none !important;
