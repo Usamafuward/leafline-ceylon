@@ -178,8 +178,8 @@ export default function PackageCard({ tour }: PackageCardProps) {
         </div>
 
         {/* Inclusions Spec Strip (Fixed height) */}
-        <div className="grid grid-cols-2 gap-2 px-3.5 py-2 bg-surface-container-low rounded-lg mb-5 text-[0.74rem] text-on-surface-variant h-[38px] box-border items-center">
-          <div className="flex items-center gap-1.5 overflow-hidden">
+        <div className="flex items-center justify-between gap-3 px-3 sm:px-3.5 py-2 bg-surface-container-low rounded-lg mb-5 text-[0.74rem] text-on-surface-variant h-[38px] box-border">
+          <div className="flex items-center gap-1.5 overflow-hidden shrink-0">
             <Car className="w-3.5 h-3.5 text-secondary shrink-0" />
             <span className="whitespace-nowrap overflow-hidden text-ellipsis">
               Private AC SUV

@@ -302,7 +302,7 @@ export default function Header() {
         <div
           data-lenis-prevent
           className="menu-drop-in popup-scroll popup-scroll-dark fixed top-[76px] sm:top-[84px] inset-x-4 sm:inset-x-8 z-40 bg-[#00251a]/95 backdrop-blur-2xl border border-white/15 rounded-3xl p-6 sm:p-8 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] flex flex-col min-[1080px]:hidden max-w-xl mx-auto"
-          style={{ maxHeight: 'calc(100vh - 6.5rem)', overflowY: 'auto' }}
+          style={{ maxHeight: 'calc(100dvh - 6.5rem)', overflowY: 'auto' }}
         >
           <div className="flex flex-col gap-4 mb-6">
             {navLinks.map((item) => {

@@ -46,8 +46,8 @@ const BENTO_COLLECTION: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'bento-2',
@@ -60,8 +60,8 @@ const BENTO_COLLECTION: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'bento-3',
@@ -72,7 +72,7 @@ const BENTO_COLLECTION: GalleryItem[] = [
     image: '/images/whale.webp',
     caption: 'A colossal blue whale breaching majestically into the morning sea spray off Mirissa’s continental shelf drop-off.',
     isBento: true,
-    colSpanClass: 'col-span-1 sm:col-span-2 lg:col-span-2',
+    colSpanClass: 'col-span-2 lg:col-span-2',
     rowSpanClass: 'row-span-1 lg:row-span-2',
     heightClass: 'h-[320px] sm:h-[406px] md:h-[446px]',
     titleSizeClass: 'text-xl sm:text-2xl md:text-3xl font-extrabold',
@@ -88,8 +88,8 @@ const BENTO_COLLECTION: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'bento-5',
@@ -102,8 +102,8 @@ const BENTO_COLLECTION: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
 
   // Row 3 (Four 1x1 cards across 4 columns)
@@ -118,8 +118,8 @@ const BENTO_COLLECTION: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'bento-7',
@@ -132,8 +132,8 @@ const BENTO_COLLECTION: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'bento-8',
@@ -146,8 +146,8 @@ const BENTO_COLLECTION: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'bento-9',
@@ -160,8 +160,8 @@ const BENTO_COLLECTION: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
 
   // Row 4 (Two wide horizontal 2-column cards)
@@ -174,9 +174,9 @@ const BENTO_COLLECTION: GalleryItem[] = [
     image: '/images/bento_bentota_lagoon.webp',
     caption: 'Aerial sweep of golden beach sands where the serene freshwater Bentota River meets the turquoise swells of the Indian Ocean.',
     isBento: true,
-    colSpanClass: 'col-span-1 sm:col-span-2 lg:col-span-2',
+    colSpanClass: 'col-span-2 lg:col-span-2',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
     titleSizeClass: 'text-lg sm:text-xl md:text-2xl font-bold',
   },
   {
@@ -188,9 +188,9 @@ const BENTO_COLLECTION: GalleryItem[] = [
     image: '/images/bento_balloons_dambulla.webp',
     caption: 'Drifting serenely above mist-filled valleys, ancient irrigation tanks, and dramatic monoliths in the golden light of dawn.',
     isBento: true,
-    colSpanClass: 'col-span-1 sm:col-span-2 lg:col-span-2',
+    colSpanClass: 'col-span-2 lg:col-span-2',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
     titleSizeClass: 'text-lg sm:text-xl md:text-2xl font-bold',
   },
 
@@ -204,7 +204,7 @@ const BENTO_COLLECTION: GalleryItem[] = [
     image: '/images/ella_nine_arch_bridge_train_crossing.webp',
     caption: 'The legendary hill country passenger train curving gently across the 1921 British colonial stone Nine Arch Viaduct surrounded by lush cloud forest.',
     isBento: true,
-    colSpanClass: 'col-span-1 sm:col-span-2 lg:col-span-2',
+    colSpanClass: 'col-span-2 lg:col-span-2',
     rowSpanClass: 'row-span-1 lg:row-span-2',
     heightClass: 'h-[320px] sm:h-[406px] md:h-[446px]',
     titleSizeClass: 'text-xl sm:text-2xl md:text-3xl font-extrabold',
@@ -220,8 +220,8 @@ const BENTO_COLLECTION: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'bento-14',
@@ -234,8 +234,8 @@ const BENTO_COLLECTION: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'bento-15',
@@ -248,8 +248,8 @@ const BENTO_COLLECTION: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'bento-16',
@@ -262,8 +262,8 @@ const BENTO_COLLECTION: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
 ];
 
@@ -281,8 +281,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'arch-2',
@@ -295,8 +295,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'arch-11',
@@ -307,7 +307,7 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     image: '/images/sigiriya_rock_aerial_drone_sunset.webp',
     caption: 'Breathtaking bird’s-eye perspective of the 200-meter monolith and Pidurangala Rock bathed in sunset gold.',
     isBento: true,
-    colSpanClass: 'col-span-1 sm:col-span-2 lg:col-span-2',
+    colSpanClass: 'col-span-2 lg:col-span-2',
     rowSpanClass: 'row-span-1 lg:row-span-2',
     heightClass: 'h-[320px] sm:h-[406px] md:h-[446px]',
     titleSizeClass: 'text-xl sm:text-2xl md:text-3xl font-extrabold',
@@ -323,8 +323,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'arch-4',
@@ -337,8 +337,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
 
   // Row 3: Four balanced single 1x1 cards across all 4 columns
@@ -353,8 +353,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'arch-6',
@@ -367,8 +367,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'arch-7',
@@ -381,8 +381,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'arch-8',
@@ -395,8 +395,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
 
   // Row 4: Two wide 2-column panoramic landscape cards
@@ -409,9 +409,9 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     image: '/images/mirissa_coconut_tree_hill_sunset.webp',
     caption: 'Slender coconut palms perched on a headland overlooking the golden Indian Ocean sunset.',
     isBento: true,
-    colSpanClass: 'col-span-1 sm:col-span-2 lg:col-span-2',
+    colSpanClass: 'col-span-2 lg:col-span-2',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
     titleSizeClass: 'text-lg sm:text-xl md:text-2xl font-bold',
   },
   {
@@ -423,9 +423,9 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     image: '/images/horton_plains_worlds_end_mist.webp',
     caption: 'Layers of misty mountain ridges dropping dramatically 1,000 meters into southern tea valleys.',
     isBento: true,
-    colSpanClass: 'col-span-1 sm:col-span-2 lg:col-span-2',
+    colSpanClass: 'col-span-2 lg:col-span-2',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
     titleSizeClass: 'text-lg sm:text-xl md:text-2xl font-bold',
   },
 
@@ -439,7 +439,7 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     image: '/images/galle_fort_ramparts_sunset.webp',
     caption: 'Visitors and locals enjoying the sea breeze along the centuries-old 17th-century coral rampart walls.',
     isBento: true,
-    colSpanClass: 'col-span-1 sm:col-span-2 lg:col-span-2',
+    colSpanClass: 'col-span-2 lg:col-span-2',
     rowSpanClass: 'row-span-1 lg:row-span-2',
     heightClass: 'h-[320px] sm:h-[406px] md:h-[446px]',
     titleSizeClass: 'text-xl sm:text-2xl md:text-3xl font-extrabold',
@@ -455,8 +455,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'arch-13',
@@ -469,8 +469,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'arch-15',
@@ -483,8 +483,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'arch-16',
@@ -497,8 +497,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
 
   // Row 7: Four balanced 1x1 cards to anchor the base
@@ -513,8 +513,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'arch-18',
@@ -527,8 +527,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'arch-19',
@@ -541,8 +541,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
   {
     id: 'arch-20',
@@ -555,8 +555,8 @@ const CLASSIC_ARCHIVES: GalleryItem[] = [
     isBento: true,
     colSpanClass: 'col-span-1',
     rowSpanClass: 'row-span-1',
-    heightClass: 'h-[195px] md:h-[215px]',
-    titleSizeClass: 'text-base md:text-lg',
+    heightClass: 'h-[170px] sm:h-[195px] md:h-[215px]',
+    titleSizeClass: 'text-sm sm:text-base md:text-lg',
   },
 ];
 
@@ -737,7 +737,7 @@ export default function GalleryPage() {
                 </div>
 
                 {/* 4-COLUMN BENTO GRID 1 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 md:gap-4.5">
+                <div className="grid grid-cols-2 lg:grid-cols-4 grid-flow-row-dense lg:grid-flow-row gap-2.5 sm:gap-3.5 md:gap-4.5">
                   {BENTO_COLLECTION.map((item, idx) => (
                     <div
                       key={item.id}
@@ -761,14 +761,14 @@ export default function GalleryPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/5 pointer-events-none transition-opacity duration-300 group-hover:opacity-90" />
 
                       {/* Pill Badge Top-Left */}
-                      <div className="absolute top-3.5 left-3.5 z-10">
+                      <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-10">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-[10px] tracking-widest uppercase font-bold text-white shadow-sm">
                           {item.pill}
                         </span>
                       </div>
 
                       {/* Title Bottom-Left */}
-                      <div className="absolute bottom-3.5 left-3.5 right-3.5 z-10 pointer-events-none">
+                      <div className="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-3.5 sm:left-3.5 sm:right-3.5 z-10 pointer-events-none">
                         <h3 className={`font-sans font-bold text-white tracking-tight leading-tight m-0 drop-shadow-md ${item.titleSizeClass}`}>
                           {item.title}
                         </h3>
@@ -798,7 +798,7 @@ export default function GalleryPage() {
                 </div>
 
                 {/* 4-COLUMN BENTO GRID 2 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 md:gap-4.5">
+                <div className="grid grid-cols-2 lg:grid-cols-4 grid-flow-row-dense lg:grid-flow-row gap-2.5 sm:gap-3.5 md:gap-4.5">
                   {CLASSIC_ARCHIVES.map((item, idx) => (
                     <div
                       key={item.id}
@@ -822,14 +822,14 @@ export default function GalleryPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/5 pointer-events-none transition-opacity duration-300 group-hover:opacity-90" />
 
                       {/* Pill Badge Top-Left */}
-                      <div className="absolute top-3.5 left-3.5 z-10">
+                      <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-10">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-[10px] tracking-widest uppercase font-bold text-white shadow-sm">
                           {item.pill}
                         </span>
                       </div>
 
                       {/* Title Bottom-Left */}
-                      <div className="absolute bottom-3.5 left-3.5 right-3.5 z-10 pointer-events-none">
+                      <div className="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-3.5 sm:left-3.5 sm:right-3.5 z-10 pointer-events-none">
                         <h3 className={`font-sans font-bold text-white tracking-tight leading-tight m-0 drop-shadow-md ${item.titleSizeClass}`}>
                           {item.title}
                         </h3>
@@ -854,7 +854,7 @@ export default function GalleryPage() {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 md:gap-7">
                 <AnimatePresence mode="popLayout">
                 {filteredItems.map((item, idx) => (
                   <motion.div
@@ -862,7 +862,7 @@ export default function GalleryPage() {
                     {...gridItemMotion(idx)}
                     onClick={(e) => openLightbox(item, e.currentTarget)}
                       style={cardBackdrop(item.image)}
-                    className="group cursor-pointer relative h-[330px] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1 transition-[box-shadow,translate] duration-300 border border-surface-container-high bg-surface-container-lowest"
+                    className="group cursor-pointer relative h-[230px] sm:h-[330px] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1 transition-[box-shadow,translate] duration-300 border border-surface-container-high bg-surface-container-lowest"
                   >
                     <motion.div layoutId={`gallery-photo-${item.id}`} className="relative w-full h-full overflow-hidden" style={THUMB_RADIUS}>
                       <Image
@@ -876,20 +876,20 @@ export default function GalleryPage() {
                     </motion.div>
                     <div className="absolute inset-0 bg-gradient-to-t from-[rgba(0,37,26,0.88)] via-[rgba(0,37,26,0.3)] to-transparent pointer-events-none" />
 
-                    <div className="absolute top-4 left-4 z-10">
+                    <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
                       <span className="inline-flex items-center px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-[10px] tracking-widest uppercase font-bold text-white shadow-sm">
                         {item.pill}
                       </span>
                     </div>
 
-                    <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 text-white pointer-events-none">
-                      <span className="text-[0.72rem] tracking-widest uppercase text-secondary-fixed font-semibold block mb-1">
+                    <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-5 md:p-6 text-white pointer-events-none">
+                      <span className="text-[0.62rem] sm:text-[0.72rem] tracking-widest uppercase text-secondary-fixed font-semibold block mb-1 truncate">
                         {item.location}
                       </span>
-                      <h3 className="font-serif text-lg md:text-xl font-semibold leading-snug m-0">
+                      <h3 className="font-serif text-sm sm:text-lg md:text-xl font-semibold leading-snug m-0">
                         {item.title}
                       </h3>
-                      <p className="text-xs text-white/80 mt-1 line-clamp-1 font-light">
+                      <p className="hidden sm:block text-xs text-white/80 mt-1 line-clamp-1 font-light">
                         {item.caption}
                       </p>
                     </div>

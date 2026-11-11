@@ -4,10 +4,54 @@ import SplitText from '@/components/ui/SplitText';
 import React, { useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useInView } from 'motion/react';
-import { ArrowRight } from 'lucide-react';
+import {
+  ArrowRight,
+  Building2,
+  Fish,
+  Landmark,
+  Leaf,
+  Sailboat,
+  TreePalm,
+  Waves,
+  type LucideIcon,
+} from 'lucide-react';
 import SRI_LANKA_PATHS from '@/data/sri_lanka_map_paths.json';
 import MapRoute from '@/components/MapRoute';
 import { townStop, RouteStop } from '@/data/mapGeo';
+
+// Every land outline, used to draw the coastal shallows behind the regions
+const ALL_LAND_PATHS: string[] = [
+  SRI_LANKA_PATHS.northern_main,
+  ...SRI_LANKA_PATHS.northern_islands,
+  SRI_LANKA_PATHS.north_central,
+  SRI_LANKA_PATHS.north_western,
+  SRI_LANKA_PATHS.central,
+  SRI_LANKA_PATHS.uva,
+  SRI_LANKA_PATHS.eastern,
+  SRI_LANKA_PATHS.western,
+  SRI_LANKA_PATHS.sabaragamuwa,
+  SRI_LANKA_PATHS.southern,
+];
+
+// Name + landmark icon shown on each region the visitor hasn't selected. Map coordinates,
+// measured so the whole badge (icon + label) sits inside its region, close to its centre.
+const REGION_MARKERS: { id: string; label: string; icon: LucideIcon; x: number; y: number }[] = [
+  { id: 'jaffna-north', label: 'North', icon: Sailboat, x: 256, y: 175 },
+  { id: 'cultural-triangle', label: 'Cultural Triangle', icon: Landmark, x: 329, y: 357 },
+  { id: 'west-coast', label: 'West Coast', icon: Fish, x: 202, y: 465 },
+  { id: 'east-coast', label: 'East Coast', icon: Waves, x: 493, y: 488 },
+  { id: 'mountainous-region', label: 'Highlands', icon: Leaf, x: 410, y: 642 },
+  { id: 'colombo-environs', label: 'Colombo', icon: Building2, x: 178, y: 678 },
+  { id: 'the-south', label: 'South Coast', icon: TreePalm, x: 307, y: 815 },
+];
+
+// Water names, set in the sea around the island
+const SEA_LABELS: { lines: string[]; x: number; y: number }[] = [
+  { lines: ['Bay of', 'Bengal'], x: 560, y: 210 },
+  { lines: ['Gulf of', 'Mannar'], x: 108, y: 226 },
+  { lines: ['Laccadive', 'Sea'], x: 132, y: 772 },
+  { lines: ['Indian', 'Ocean'], x: 565, y: 800 },
+];
 
 export interface TravelRegion {
   id: string;
@@ -345,6 +389,69 @@ export default function CeylonRegionExplorer() {
                 viewBox="75 0 575 875"
                 className="w-full h-full max-h-[550px] overflow-visible object-contain drop-shadow-xs"
               >
+                <defs>
+                  <pattern id="sea-dots" width="16" height="16" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1.3" fill="#c9ddd4" />
+                  </pattern>
+                  <radialGradient id="sea-fade" cx="50%" cy="50%" r="55%">
+                    <stop offset="55%" stopColor="#fff" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#fff" stopOpacity="0" />
+                  </radialGradient>
+                  <mask id="sea-mask">
+                    <rect x="75" y="0" width="575" height="875" fill="url(#sea-fade)" />
+                  </mask>
+                </defs>
+
+                {/* Sea: soft dot texture fading out toward the card edges */}
+                <rect
+                  x="75"
+                  y="0"
+                  width="575"
+                  height="875"
+                  fill="url(#sea-dots)"
+                  mask="url(#sea-mask)"
+                  className="pointer-events-none"
+                />
+
+                {/* Coastal shallows: two soft rings hugging the coastline */}
+                <g className="pointer-events-none" fill="#d6ebe6" stroke="#d6ebe6" strokeLinejoin="round">
+                  <g opacity={0.45} strokeWidth={30}>
+                    {ALL_LAND_PATHS.map((d, i) => (
+                      <path key={`shallow-outer-${i}`} d={d} />
+                    ))}
+                  </g>
+                  <g opacity={0.9} strokeWidth={12}>
+                    {ALL_LAND_PATHS.map((d, i) => (
+                      <path key={`shallow-inner-${i}`} d={d} />
+                    ))}
+                  </g>
+                </g>
+
+                {/* Sea names */}
+                <g className="pointer-events-none font-serif italic" fill="#86a99a" fontSize={15} textAnchor="middle">
+                  {SEA_LABELS.map((sea) => (
+                    <text key={sea.lines.join(' ')} x={sea.x} y={sea.y} letterSpacing="0.06em">
+                      {sea.lines.map((line, i) => (
+                        <tspan key={line} x={sea.x} dy={i === 0 ? 0 : 20}>
+                          {line}
+                        </tspan>
+                      ))}
+                    </text>
+                  ))}
+                </g>
+
+                {/* Compass */}
+                <g className="pointer-events-none" transform="translate(590 70)">
+                  <circle r="22" fill="none" stroke="#c9ddd4" strokeWidth="1" />
+                  <circle r="15" fill="none" stroke="#c9ddd4" strokeWidth="0.8" strokeDasharray="2 3" />
+                  <path d="M0 -20 L5 0 L0 20 L-5 0 Z" fill="#c9ddd4" />
+                  <path d="M0 -20 L5 0 L-5 0 Z" fill="#0c5037" opacity="0.75" />
+                  <path d="M-20 0 L0 -3.5 L20 0 L0 3.5 Z" fill="#c9ddd4" />
+                  <text y="-28" textAnchor="middle" fontSize="11" fontWeight={700} fill="#0c5037" opacity="0.75">
+                    N
+                  </text>
+                </g>
+
                 {/* 1. Northern Province */}
                 <g
                   onClick={() => selectRegion('jaffna-north')}
@@ -452,6 +559,49 @@ export default function CeylonRegionExplorer() {
                     style={getRegionStyle('the-south')}
                     className="transition-colors duration-200"
                   />
+                </g>
+
+                {/* Region names & landmark icons (the selected region shows its route instead) */}
+                <g className="pointer-events-none">
+                  {REGION_MARKERS.map(({ id, label, icon: Icon, x, y }) => {
+                    const isSelected = id === selectedRegionId;
+                    const isHovered = id === hoveredRegionId;
+                    return (
+                      <g
+                        key={id}
+                        className="transition-opacity duration-300"
+                        style={{ opacity: isSelected ? 0 : isHovered ? 1 : 0.8 }}
+                      >
+                        <circle
+                          cx={x}
+                          cy={y - 14}
+                          r={17}
+                          fill="#ffffff"
+                          stroke={isHovered ? '#0c5037' : '#cbdcd1'}
+                          strokeWidth={1.2}
+                        />
+                        <Icon
+                          x={x - 10}
+                          y={y - 24}
+                          width={20}
+                          height={20}
+                          color="#0c5037"
+                          strokeWidth={1.8}
+                        />
+                        <text
+                          x={x}
+                          y={y + 20}
+                          textAnchor="middle"
+                          fontSize={13}
+                          fontWeight={700}
+                          letterSpacing="0.12em"
+                          fill={isHovered ? '#0c5037' : '#5f7d6e'}
+                        >
+                          {label.toUpperCase()}
+                        </text>
+                      </g>
+                    );
+                  })}
                 </g>
 
                 {/* Animated Touring Route (re-keyed so it replays for every region) */}

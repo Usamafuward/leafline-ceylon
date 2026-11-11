@@ -263,7 +263,7 @@ export default function PackageDetailPage({
               </div>
 
               {/* Accordion List with Scroll-Drawn Timeline */}
-              <div ref={itineraryRef} className="relative flex flex-col gap-4 pl-8 sm:pl-10">
+              <div ref={itineraryRef} className="relative flex flex-col gap-4 pl-6 sm:pl-10">
                 <div
                   aria-hidden="true"
                   className="absolute left-[7px] sm:left-[11px] top-9 bottom-9 w-[2px] rounded-full bg-surface-container-high overflow-hidden"
@@ -285,7 +285,7 @@ export default function PackageDetailPage({
                         dayDotRefs.current[idx] = el;
                       }}
                       aria-hidden="true"
-                      className={`absolute -left-8 sm:-left-10 top-[30px] sm:top-[26px] w-4 h-4 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${
+                      className={`absolute -left-6 sm:-left-10 top-[30px] sm:top-[26px] w-4 h-4 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${
                         isReached
                           ? 'bg-secondary border-secondary scale-100 shadow-[0_0_0_5px_rgba(178,240,209,0.45)]'
                           : 'bg-white border-outline-variant scale-90'
@@ -304,11 +304,11 @@ export default function PackageDetailPage({
                       <button
                         type="button"
                         onClick={() => toggleDay(day.day)}
-                        className="w-full p-5 sm:px-6 flex items-center justify-between gap-4 bg-transparent border-none cursor-pointer text-left"
+                        className="w-full p-4 sm:p-5 sm:px-6 flex items-center justify-between gap-3 sm:gap-4 bg-transparent border-none cursor-pointer text-left"
                       >
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
                           <span
-                            className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-[0.82rem] flex-shrink-0 ${isOpen ? 'bg-primary text-white' : 'bg-surface-container-low text-primary'
+                            className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold text-[0.82rem] flex-shrink-0 ${isOpen ? 'bg-primary text-white' : 'bg-surface-container-low text-primary'
                               }`}
                           >
                             {day.day < 10 ? `0${day.day}` : day.day}
@@ -324,14 +324,14 @@ export default function PackageDetailPage({
                         </div>
 
                         <ChevronDown
-                          className={`w-5 h-5 text-outline transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'
+                          className={`w-5 h-5 shrink-0 text-outline transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'
                             }`}
                         />
                       </button>
 
                       {/* Accordion Content */}
                       {isOpen && (
-                        <div className="px-5 pb-5 sm:px-6 sm:pb-6 text-[0.9rem] text-on-surface-variant leading-relaxed border-t border-surface-container-low pt-4 sm:pl-19">
+                        <div className="px-4 pb-5 sm:px-6 sm:pb-6 text-[0.9rem] text-on-surface-variant leading-relaxed border-t border-surface-container-low pt-4 sm:pl-19">
                           <p className="text-[0.9rem] text-on-surface-variant leading-relaxed mb-5">
                             {day.description}
                           </p>

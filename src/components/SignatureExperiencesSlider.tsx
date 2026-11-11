@@ -496,8 +496,9 @@ export default function SignatureExperiencesSlider() {
           {/* Right Column: Cards Carousel & Navigation Controls Directly Underneath */}
           <div className="lg:col-span-7 flex flex-col w-full overflow-hidden lg:self-stretch">
 
-            {/* Three cards show at md and xl+, two at lg (1024–1279px) where this column is narrow and
-                tall, so the stretched cards keep a sensible shape. */}
+            {/* Two whole cards show on phones, three from sm up, two again at lg (1024–1279px) where
+                this column is narrow and tall, and three at xl+. Widths and the strip step are
+                fractions of the row, so cards never get cut off at the edge. */}
             {/* Horizontal Cards Queue: one strip of repeated cards glides left as the chosen card
                 hands off to the background (the card leaving on the left fades out, the slide just
                 left rejoins at the far end). Pure CSS transform transition = compositor-smooth. */}
@@ -510,7 +511,7 @@ export default function SignatureExperiencesSlider() {
               <div
                 ref={carouselTrackRef}
                 onTransitionEnd={handleStripTransitionEnd}
-                className="flex items-center gap-4 lg:h-full will-change-transform [--step:176px] sm:[--step:206px] md:[--step:calc((100%+1rem)/3)] lg:[--step:calc((100%+1rem)/2)] xl:[--step:calc((100%+1rem)/3)]"
+                className="flex items-center gap-4 lg:h-full will-change-transform [--step:calc((100%+1rem)/2)] sm:[--step:calc((100%+1rem)/3)] lg:[--step:calc((100%+1rem)/2)] xl:[--step:calc((100%+1rem)/3)]"
                 style={{
                   transform: `translate3d(calc(var(--step) * ${-stripPos}), 0, 0)`,
                   transition:
@@ -535,7 +536,7 @@ export default function SignatureExperiencesSlider() {
                         }
                         goTo(exp.slideIndex);
                       }}
-                      className={`relative w-[160px] sm:w-[190px] md:w-[calc((100%-2rem)/3)] min-w-[160px] sm:min-w-[190px] md:min-w-[calc((100%-2rem)/3)] md:max-w-[calc((100%-2rem)/3)] lg:w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-1rem)/2)] lg:max-w-[calc((100%-1rem)/2)] xl:w-[calc((100%-2rem)/3)] xl:min-w-[calc((100%-2rem)/3)] xl:max-w-[calc((100%-2rem)/3)] h-[280px] sm:h-[310px] md:h-[330px] lg:h-full rounded-2xl overflow-hidden shrink-0 cursor-pointer group border border-white/15 hover:border-secondary-fixed/70 transition-[opacity,border-color] duration-500 ${
+                      className={`relative w-[calc((100%-1rem)/2)] min-w-[calc((100%-1rem)/2)] max-w-[calc((100%-1rem)/2)] sm:w-[calc((100%-2rem)/3)] sm:min-w-[calc((100%-2rem)/3)] sm:max-w-[calc((100%-2rem)/3)] lg:w-[calc((100%-1rem)/2)] lg:min-w-[calc((100%-1rem)/2)] lg:max-w-[calc((100%-1rem)/2)] xl:w-[calc((100%-2rem)/3)] xl:min-w-[calc((100%-2rem)/3)] xl:max-w-[calc((100%-2rem)/3)] h-[260px] sm:h-[310px] md:h-[330px] lg:h-full rounded-2xl overflow-hidden shrink-0 cursor-pointer group border border-white/15 hover:border-secondary-fixed/70 transition-[opacity,border-color] duration-500 ${
                         isActiveSlide ? 'opacity-0 pointer-events-none' : 'opacity-100'
                       }`}
                     >
@@ -553,7 +554,7 @@ export default function SignatureExperiencesSlider() {
                       <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/65 to-transparent pointer-events-none" />
 
                       {/* Top Row: slide number & "View" chip that appears on hover */}
-                      <div className="absolute top-3.5 left-4 right-3.5 flex items-center justify-between z-10 pointer-events-none">
+                      <div className="absolute top-3.5 left-3.5 sm:left-4 right-3.5 flex items-center justify-between z-10 pointer-events-none">
                         <span className="font-serif text-sm sm:text-base text-secondary-fixed tabular-nums drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
                           {String(exp.slideIndex + 1).padStart(2, '0')}
                         </span>
@@ -564,7 +565,7 @@ export default function SignatureExperiencesSlider() {
                       </div>
 
                       {/* Card Content at Bottom */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex flex-col justify-end text-left z-10 pointer-events-none">
+                      <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-5 flex flex-col justify-end text-left z-10 pointer-events-none">
                         <div className="w-3.5 h-[1.5px] bg-secondary-fixed mb-1.5 transition-all duration-500 group-hover:w-8" />
                         <span className="text-[10px] sm:text-[11px] text-secondary-fixed font-semibold tracking-wider uppercase truncate mb-0.5 font-sans">
                           {exp.cardRegion}
@@ -614,7 +615,7 @@ export default function SignatureExperiencesSlider() {
                     onClick={() => goTo(i)}
                     aria-label={`Show ${exp.cardTitle}`}
                     aria-current={i === activeIndex}
-                    className="flex-1 py-3 bg-transparent border-none cursor-pointer"
+                    className="flex-1 py-4 bg-transparent border-none cursor-pointer"
                   >
                     <span className="block h-[2px] w-full bg-white/20 rounded-full overflow-hidden">
                       <span

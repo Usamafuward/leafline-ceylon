@@ -177,7 +177,7 @@ function PackagesContent() {
           {/* Row 1: Search & Themed Dropdown Controls */}
           <div className="flex flex-wrap gap-2.5 items-center justify-between">
             {/* Search Input */}
-            <div className="relative flex-1 min-w-[240px] max-w-md">
+            <div className="relative w-full sm:w-auto sm:flex-1 sm:min-w-[240px] max-w-md">
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none" />
               <input
                 type="text"
@@ -198,13 +198,13 @@ function PackagesContent() {
             </div>
 
             {/* Themed Dropdown Selects */}
-            <div className="flex gap-2 flex-wrap items-center">
+            <div className="grid grid-cols-2 gap-2 w-full sm:w-auto sm:flex sm:flex-wrap items-center">
               {/* Region Filter Dropdown */}
-              <div className="relative">
+              <div className="relative min-w-0">
                 <select
                   value={regionFilter}
                   onChange={(e) => setRegionFilter(e.target.value)}
-                  className={`appearance-none pl-4 pr-8 py-2 rounded-full text-xs font-medium cursor-pointer outline-none transition-colors border ${
+                  className={`w-full sm:w-auto truncate appearance-none pl-3.5 sm:pl-4 pr-8 py-2.5 sm:py-2 rounded-full text-xs font-medium cursor-pointer outline-none transition-colors border ${
                     regionFilter !== 'all'
                       ? 'bg-primary text-white border-primary shadow-xs'
                       : 'bg-white text-on-surface-variant border-[#cbdcd1] hover:border-primary/40 hover:text-primary'
@@ -224,11 +224,11 @@ function PackagesContent() {
               </div>
 
               {/* Duration Filter Dropdown */}
-              <div className="relative">
+              <div className="relative min-w-0">
                 <select
                   value={durationFilter}
                   onChange={(e) => setDurationFilter(e.target.value)}
-                  className={`appearance-none pl-4 pr-8 py-2 rounded-full text-xs font-medium cursor-pointer outline-none transition-colors border ${
+                  className={`w-full sm:w-auto truncate appearance-none pl-3.5 sm:pl-4 pr-8 py-2.5 sm:py-2 rounded-full text-xs font-medium cursor-pointer outline-none transition-colors border ${
                     durationFilter !== 'all'
                       ? 'bg-primary text-white border-primary shadow-xs'
                       : 'bg-white text-on-surface-variant border-[#cbdcd1] hover:border-primary/40 hover:text-primary'
@@ -248,11 +248,11 @@ function PackagesContent() {
               </div>
 
               {/* Sort By Dropdown */}
-              <div className="relative">
+              <div className="relative min-w-0 col-span-2 sm:col-span-1">
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className={`appearance-none pl-4 pr-8 py-2 rounded-full text-xs font-medium cursor-pointer outline-none transition-colors border ${
+                  className={`w-full sm:w-auto truncate appearance-none pl-3.5 sm:pl-4 pr-8 py-2.5 sm:py-2 rounded-full text-xs font-medium cursor-pointer outline-none transition-colors border ${
                     sortBy !== 'recommended'
                       ? 'bg-primary text-white border-primary shadow-xs'
                       : 'bg-white text-on-surface-variant border-[#cbdcd1] hover:border-primary/40 hover:text-primary'
@@ -275,7 +275,7 @@ function PackagesContent() {
               {isFiltered && (
                 <button
                   onClick={resetFilters}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium text-red-600 bg-red-50 border border-red-200 hover:bg-red-100 transition-colors cursor-pointer"
+                  className="col-span-2 sm:col-span-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium text-red-600 bg-red-50 border border-red-200 hover:bg-red-100 transition-colors cursor-pointer"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>Reset</span>

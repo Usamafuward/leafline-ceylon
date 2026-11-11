@@ -108,7 +108,7 @@ export default function ContactPage() {
                 <span className="text-secondary font-semibold">24/7 Available</span>
                 <a
                   href="tel:+94112345678"
-                  className="font-bold text-secondary hover:text-primary no-underline transition-colors"
+                  className="font-bold text-secondary hover:text-primary no-underline transition-colors py-2.5 -my-2.5"
                 >
                   Call Direct &rarr;
                 </a>
@@ -132,7 +132,7 @@ export default function ContactPage() {
                   href="https://wa.me/94771234567"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-bold text-secondary hover:text-primary no-underline transition-colors"
+                  className="font-bold text-secondary hover:text-primary no-underline transition-colors py-2.5 -my-2.5"
                 >
                   Open Chat &rarr;
                 </a>
@@ -155,7 +155,7 @@ export default function ContactPage() {
                 <span className="text-outline">&lt; 4h Response</span>
                 <a
                   href="mailto:info@leaflineceylon.com"
-                  className="font-bold text-secondary hover:text-primary no-underline transition-colors"
+                  className="font-bold text-secondary hover:text-primary no-underline transition-colors py-2.5 -my-2.5"
                 >
                   Send Email &rarr;
                 </a>
